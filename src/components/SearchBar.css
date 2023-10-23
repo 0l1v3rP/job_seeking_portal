@@ -1,0 +1,31 @@
+.btn-search{
+
+    color: black;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    background-color: yellow ;
+    border-radius: 8px;
+    
+}
+
+.btn-search:hover{
+    background-color: rgba(22, 22, 14, 0.836) ;
+}
+
+@media only screen and (max-width: 576px) {
+    .btn-search{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;  
+        width: 150px;  }
+    #locationInput, #searchInput, label{
+        max-width: 400px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        
+    }
+  }
+

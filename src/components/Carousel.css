@@ -1,0 +1,30 @@
+
+  .carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: black;
+  z-index: 1;
+}
+.carousel {
+    height:360px;
+    background: rgba(93, 110, 112, 0.534);
+    }
+.carousel-item img {
+height:360px;
+max-width: 500px;
+align-content: center;
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 50%;
+font-weight: bold;
+}
+
+@media only screen and (max-width: 500px) {
+    .carousel-item img {
+        height:70vw;
+        width: auto;
+        }
+    .carousel {
+        height: 70vw;
+    }
+  }

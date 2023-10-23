@@ -1,0 +1,12 @@
+.nav-item:hover{
+    background-color: rgb(100, 173, 185);
+}
+
+.text-body-secondary {
+    color:white !important;
+}
+
+
+.nav-item:hover {
+    color:black;
+}

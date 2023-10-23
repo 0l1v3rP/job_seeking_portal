@@ -1,0 +1,8 @@
+.nav-link{
+    text-align: center;
+    color:white
+}
+.nav-link:hover{
+    background-color: rgba(63, 119, 128, 0.534);
+    color: black !important;
+}
