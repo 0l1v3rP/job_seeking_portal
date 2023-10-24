@@ -1,0 +1,14 @@
+.dropDown{
+ margin-bottom: 10px;
+ width: 200px;
+}
+
+.dropDownContainer{
+    
+    align-content: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+
+}

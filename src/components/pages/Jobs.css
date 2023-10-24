@@ -1,0 +1,23 @@
+.left-column{ 
+	float:left; 
+	width: 30% 
+} 
+.right-column{ 
+	float:right; 
+	width: 70%
+} 
+
+.component {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.component h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.component p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
