@@ -4,12 +4,15 @@ function JobOffer() {
   return (
 
 <div className="container">
+  
     <div className='textContainer'>
-      <h3 >Looking for a welder</h3>
-      <p>We are looking for a welder to weld stuff, if you know how to do it then come to us!!!!.We are looking for a welder to weld stuff, if you know how to do it then come to us!!!!.We are looking for a welder to weld stuff, if you know how to do it then come to us!!!!.We are looking for a welder to weld stuff, if you know how to do it then come to us!!!!.</p>
+      <h3 className='h3color'>Looking for a welder</h3>
+      <p>Slovakia welding</p>
+      <p>Zilina (job with occasional home office)</p>
+      <p>2000 eur</p>
     </div>
     <div className='imgContainer' >
-      <img className='imgJobOffer' src='./images/welding.jpg'></img>
+      <img className='imgJobOffer' src='./images/welding.jpg' alt='...'></img>
     </div>
 </div>
   )

@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark">
       <a href="/" className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-        <img src="./JSPwebIcon.png" width="40" height="32" alt="Logo" />
+        <img src="./JSPwebIcon.png" width="40" height="32" alt="..." />
       </a>
       <button className="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
