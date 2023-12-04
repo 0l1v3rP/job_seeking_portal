@@ -12,7 +12,7 @@ function Home() {
   const { isSignedIn } = useAuth();
   const [show, setShow] = useState(false);
 
-  euseEffect(() => {
+  useEffect(() => {
     if (isSignedIn !== null) {
       setShow(!isSignedIn);
     }

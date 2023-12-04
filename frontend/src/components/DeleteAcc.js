@@ -25,8 +25,8 @@ const DeleteModal = ({ handleClose }) => {
     return (
         <GenericModal
         handleClose={handleClose}
-        title="Sign Out"
-        actionText="Sign Out"
+        title="Delete Account"
+        actionText="Delete Account"
         actionFunction={handleDelete}
         />
     );

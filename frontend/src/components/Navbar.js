@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Navbar.css';
 import { useAuth } from './AuthProvider';
 import SignOutModal from './SingOutModal';
-import DeleteModal from './deleteAcc';
+import DeleteModal from './DeleteAcc';
 
 function Navbar() {
   const { isSignedIn } = useAuth();
