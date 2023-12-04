@@ -15,7 +15,6 @@ export default function Router() {
             <Footer/>
             </>
         )
-
     }
 
     const BrowserRoutes =() => {

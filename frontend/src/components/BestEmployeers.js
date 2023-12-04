@@ -20,7 +20,7 @@ function BestEmployeers() {
     <div className="row d-flex align-items-center" style={style}>
       {images.map((image, index) => (
         <div key={index} className="col-lg-2 col-md-3 col-sm-4 col-6 mb-2 mb-lg-0">
-          <img src={image} className="w-100 rounded mb-4" alt={`Logo ${index + 1}`} />
+          <img src={image} className="w-100 rounded mb-4" alt={`Logo ${  + 1}`} />
         </div>
       ))}
     </div>

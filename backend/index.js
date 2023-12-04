@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const auth = require('./routers/authRouter');
+const auth = require('./routers/accountRouter');
 const {connectToDatabase, disconnectFromDatabase } = require('./database/dbConnection');
 const session = require('express-session');
 const app = express();
@@ -13,16 +13,20 @@ app.use(session({
     secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } 
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 3600000,
+    //   sameSite: 'Strict',
+    },
   }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 const corsOptions = {
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: true,
-    optionSuccessStatus: 200
 };
 
 app.use(cors(corsOptions)); 

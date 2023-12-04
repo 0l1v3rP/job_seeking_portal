@@ -1,37 +1,41 @@
 // SignInModal.js
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useAuth } from './AuthProvider';
 
 const SignInModal = ({ show, handleClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {isSignedIn, setSignedIn} = useAuth();
 
-async function signIn() {
-  try {
-    const response = await fetch('http://localhost:8000/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json',
-      },
-      body: JSON.stringify([email, password])
-    });
 
-    if (response.ok) {
-      console.log('User Signed in successfully'); 
+  async function signIn() {
+    try {
+      const response = await fetch('http://localhost:8000/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email: email, password: password })
+      });
 
-    } else {
-      const errorData = await response.json();
-      console.error('User Sign in failed:', errorData);
+      if (response.ok) {
+        console.log('User Signed in successfully'); 
+        setSignedIn(true);
+        handleClose();
+      } else {
+        const errorData = await response.json();
+        console.error('User Sign in failed:', errorData);
+      }
+    } catch (error) {
+      console.error('An error occurred during user registration', error);
     }
-  } catch (error) {
-    console.error('An error occurred during user registration', error);
   }
-}
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     console.log('Signing in with:', email, password);
-    signIn();
-    handleClose();
+    await signIn();
   };
 
   return (

@@ -1,40 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Carousel from '../components/Carousel';
 import SearchBar from '../components/SearchBar';
 import '../App.css';
 import BestEmployeers from '../components/BestEmployeers';
 import SignInModal from '../components/SignInModal';
-import { useState, useEffect } from 'react';
-
+import { useAuth } from '../components/AuthProvider';
 
 function Home() {
 
-    const [isSignedIn, setSignedIn] = useState(false);
+  
+  const { isSignedIn } = useAuth();
+  const [show, setShow] = useState(false);
 
-    // const handleShowSignInModal = () => setSignedIn(false);
-    const handleCloseSignInModal = () => setSignedIn(true);
+  euseEffect(() => {
+    if (isSignedIn !== null) {
+      setShow(!isSignedIn);
+    }
+  }, [isSignedIn]);
 
-    async function checkSignInStatus() {
-        try {
-          const response = await fetch('http://localhost:8000/checksigninstatus', {
-            method: 'POST'
-          }); 
-          const data = await response.json();
-          return data.isLoggedIn;
-        } catch (error) {
-          console.error('Error checking sign-in status:', error);
-          return false;
-        }
-      }
+  if (isSignedIn === null) {
+    return ;
+  }
 
-    useEffect(() => {
-        async function fetchSignInStatus() {
-            const status = await checkSignInStatus();
-            setSignedIn(status);
-        }
-        fetchSignInStatus();
-    }, []);
-    
+  const handleCloseModal = () => setShow(false);
 
     return (
         <div>
@@ -45,7 +33,7 @@ function Home() {
             <br/>
             <p className='top border-bottom' style={{padding:20}}>Top Employeers</p>
             <BestEmployeers/>
-            <SignInModal show={!isSignedIn} handleClose={handleCloseSignInModal} />
+            <SignInModal show={show} handleClose={handleCloseModal}/>
         </div>
     );
 }

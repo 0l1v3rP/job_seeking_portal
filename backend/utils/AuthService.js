@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const saltRounds = 10; 
+const saltRounds = 10;
+const {InvalidInputException} = require('../utils/exceptions'); 
 
 async function hashPassword(password) {
     try {
@@ -12,11 +13,16 @@ async function hashPassword(password) {
     }
 }
 
-async function compareHashedPswds(enteredPassword, storedHashPassword){
+async function  compareHashedPswds(enteredPassword, storedHashPassword){
     try{
-        return await bcrypt.compare(enteredPassword, storedHashPassword)
-    } catch(err){
-        console.error('Error comparing password', err);
+        const passwordsMatch = await bcrypt.compare(enteredPassword, storedHashPassword);
+        if (passwordsMatch) {
+          console.log('Passwords match');
+        } else {
+          console.log('Passwords don\'t match');
+          throw new InvalidInputException('Wrong password');
+        }    } catch(err){
+        console.error('Error comparing password', err.message);
         throw err;
     }
 }
