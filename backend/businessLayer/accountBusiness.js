@@ -9,9 +9,12 @@ async function registerUserBis(user){
 }
 
 async function editUserBis(user){
-    await editUser(user);
+    await data.editUser(user);
 }
 
+async function getMyAccount(email){
+    return data.getAccount(email);
+}
 
 async function signInBis(email, password) {
     const userPswd = await data.getUserPswd(email);
@@ -21,7 +24,6 @@ async function signInBis(email, password) {
           const storedHashPassword = firstUser.password;
           await compareHashedPswds(password, storedHashPassword);
         }
-  
     } else {
         throw new InvalidInputException('Invalid email');
     }
@@ -35,5 +37,6 @@ module.exports = {
     registerUserBis,
     signInBis,
     editUserBis,
-    deleteAccountBis
+    deleteAccountBis,
+    getMyAccount
 }

@@ -16,10 +16,16 @@ async function editUser(user){
 async function deleteUser(email){
     dbHelper.deleteRecord(dbHelper.Endpoints.USER ,'email', email);
 }
-    
+
+async function getAccount(email){
+    const query = `SELECT * FROM ${dbHelper.Endpoints.USER} WHERE email = $1`;
+    const result = (await dbHelper.selectRecords(query, [email]))[0];
+    return result;
+}
 module.exports = { 
     insertUser,
     getUserPswd,
     editUser,
     deleteUser, 
+    getAccount
  };

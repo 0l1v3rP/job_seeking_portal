@@ -1,16 +1,25 @@
 const User = require('../models/user');
 const ValidationService = require('../utils/validationService');
-const {registerUserBis, signInBis, editUserBis, deleteAccountBis} = require('../businessLayer/accountBusiness');
+const business = require('../businessLayer/accountBusiness');
 const { InvalidInputException } = require('../utils/exceptions');
 
 async function editUser(req, res) {
-  await handleUserOperation(req, res, editUserBis);
+  await handleUserOperation(req, res, business.editUserBis);
 }
 
 async function registerUser(req, res) {
-  await handleUserOperation(req, res, registerUserBis);
+  await handleUserOperation(req, res, business.registerUserBis);
 }
 
+async function getMyAccount(req, res) {
+  try {
+    const email = req.session.user.email;
+    const user = await business.getMyAccount(email);
+    return res.status(200).json({user: user});
+  } catch {
+    return res.status(400).json({ error: 'System error', });
+  }
+}
 
 async function signIn(req, res) {
   try {
@@ -21,7 +30,7 @@ async function signIn(req, res) {
       return res.status(400).json({ error: 'Validation failed', details: validationErrors });
     }
 
-    await signInBis(email, password);
+    await business.signInBis(email, password);
     req.session.user = { email };
     res.status(200).json({ message: 'User signed in successfully' });
   } catch (error) {
@@ -56,7 +65,7 @@ async function checkSignInStatus(req, res) {
 async function deleteAccount(req, res) {
   try{  
     const email = req.session.user.email;
-    await deleteAccountBis(email);
+    await business.deleteAccountBis(email);
     res.status(200).json({ message: 'User signed out successfully' });
   } catch(error){
     handleServerError('Error deleting accout:', error, res);
@@ -101,5 +110,6 @@ module.exports= {
   checkSignInStatus,
   signOut,
   editUser,
-  deleteAccount
+  deleteAccount,
+  getMyAccount
 } 
