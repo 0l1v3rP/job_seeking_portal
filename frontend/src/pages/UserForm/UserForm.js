@@ -10,8 +10,8 @@ import { useAuth } from '../../components/AuthProvider';
 const UserForm = () => {
   const { isSignedIn } = useAuth();
 
-  const navigate = useNavigate()
-    const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     username: '',
@@ -37,6 +37,19 @@ const UserForm = () => {
     country: '',
     zip: '',
   });
+
+  useEffect(() => {
+    if (isSignedIn) {
+      setFormErrors((prevErrors) => {
+        const { email, password, ...rest } = prevErrors;
+        return rest;
+      });
+      setFormData((prevData) => {
+        const { email, password, ...rest } = prevData;
+        return rest;
+      });
+    }
+  }, [isSignedIn]);
 
   const[formSubmitted, setFormSubmitted] = useState(false);
 
@@ -142,13 +155,14 @@ const UserForm = () => {
     });
   }
 
-  const performUserAction = async (endpoint, successMessage) => {
+  const performUserAction = async (endpoint, successMessage, method) => {
     try {
       const response = await fetch(`http://localhost:8000/${endpoint}`, {
-        method: 'POST',
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
   
@@ -165,13 +179,17 @@ const UserForm = () => {
   };
   
   const updateUser = async () => {
-    await performUserAction('editaccount', 'User edit successfully');
+    await performUserAction('editaccount', 'User edit successfully', 'PUT');
   };
   
   const registerUser = async () => {
-    await performUserAction('register', 'User registered successfully');
+    await performUserAction('register', 'User registered successfully', 'POST');
   };
   
+  if (isSignedIn === null) {
+    return ;
+  }
+
   return (
     <div className='register-form'>
       <p className='Title'>MAKE YOUR REGISTRATION UPDATE</p>

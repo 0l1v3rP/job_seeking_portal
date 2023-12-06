@@ -79,8 +79,10 @@ async function handleUserOperation(req, res, operationCallback) {
     if (validationErrors.length !== 0) {
       return res.status(400).json({ error: 'Validation failed', details: validationErrors });
     }
-
     const user = new User(userData);
+    if(req.session.user){
+      user.email = req.session.user.email;
+    }
     await operationCallback(user);
 
     res.status(200).json({ message: `User ${operationCallback.name} successfully` });
