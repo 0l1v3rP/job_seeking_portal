@@ -1,17 +1,24 @@
 import React from 'react'
 import '../../App.css' ;
-import './Register.css'
+import './UserForm.css'
 import { useState, useEffect } from 'react';
 import FormField from './FormField';
 import CountryFormField from './CountryFormField';
-import {useNavigate} from 'react-router-dom'
-const Register = () => {
+import {useNavigate} from 'react-router-dom';
+import { useAuth } from '../../components/AuthProvider';
+
+const UserForm = () => {
+  const { isSignedIn } = useAuth();
+
   const navigate = useNavigate()
     const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     username: '',
-    email: '',
+    ...(!isSignedIn && {
+      email: '',
+      password: '',
+    }),
     address: '',
     password: '',
     country: '',
@@ -22,9 +29,11 @@ const Register = () => {
     firstName: '',
     lastName: '',
     username: '',
-    email: '',
+    ...(!isSignedIn && {
+       email: '',
+       password: '',
+     }),
     address: '',
-    password: '',
     country: '',
     zip: '',
   });
@@ -32,6 +41,9 @@ const Register = () => {
   const[formSubmitted, setFormSubmitted] = useState(false);
 
   const validateInput = (name, value) => {
+    if(isSignedIn && (name === 'email' || name === 'password') ){
+
+    }
     let error;
     if(name === "country"){
       error = !value ? 'Please select a country from the list' : '';
@@ -81,22 +93,47 @@ const Register = () => {
     Object.entries(formData).forEach(i => validateInput(i[0], i[1]));
     setFormSubmitted(true);
   }
+  useEffect(() => {
+    if(isSignedIn) {
+        fetch('http://localhost:8000/getmyaccount', {
+          credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(userObj => {
+          setFormData(prevData => ({
+            ...prevData,
+            firstName: userObj.user.firstname || '',
+            lastName: userObj.user.lastname || '',
+            username: userObj.user.username || '',
+            address: userObj.user.address || '',
+            country: userObj.user.country || '',
+            zip: userObj.user.zip || '',
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+    }
+  }, [isSignedIn]);
 
   useEffect(() => {
     if (formSubmitted) {
       const hasErrors = Object.values(formErrors).some(error => error !== '');
       if (!hasErrors) {
         console.log('Form submitted successfully!');
-        registerUser();
+        if (isSignedIn) {
+          updateUser();
+        } else{
+          registerUser();
+        }
         setFormSubmitted(false);
       } else {
-        // clearForm();
         console.log('Form has validation errors. Please correct them.');
       }
     }
   }, [formErrors]);
   
-  //obsolete
+  //not in use
   const clearForm = () => {
     setFormData(prevFormData => {
       const newFormData = { ...prevFormData };
@@ -107,28 +144,35 @@ const Register = () => {
     });
   }
 
-  const registerUser = async () => {
+  const performUserAction = async (endpoint, successMessage) => {
     try {
-      const response = await fetch('http://localhost:8000/register', {
+      const response = await fetch(`http://localhost:8000/${endpoint}`, {
         method: 'POST',
         headers: {
-          'Content-Type' : 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
+  
       if (response.ok) {
-        console.log('User registered successfully');
-      navigate('/');          
-
+        console.log(successMessage);
+        navigate('/');
       } else {
         const errorData = await response.json();
-        console.error('User registration failed:', errorData);
+        console.error(`User action failed for ${endpoint}:`, errorData);
       }
     } catch (error) {
-      console.error('An error occurred during user registration', error);
+      console.error(`An error occurred during user action for ${endpoint}`, error);
     }
-  }
+  };
+  
+  const updateUser = async () => {
+    await performUserAction('editaccount', 'User edit successfully');
+  };
+  
+  const registerUser = async () => {
+    await performUserAction('register', 'User registered successfully');
+  };
   
   return (
     <div className='register-form'>
@@ -161,24 +205,27 @@ const Register = () => {
           error={formErrors.username}
           onChange={(e) => handleInputChange(e)}
         />
-
-        <FormField
-          label="Password"
-          name="password"
-          type="password"
-          value={formData.password}
-          error={formErrors.password}
-          onChange={(e) => handleInputChange(e)}
-        />
-
-        <FormField
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
-          error={formErrors.email}
-          onChange={(e) => handleInputChange(e)}
-        />
+      {!isSignedIn &&
+        <>
+          <FormField
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
+            error={formErrors.password}
+            onChange={(e) => handleInputChange(e)}
+          />
+        
+          <FormField
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            error={formErrors.email}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </>
+      }
 
         <FormField
           label="Address"
@@ -206,9 +253,9 @@ const Register = () => {
 
       </div> 
       <br/>
-      <button className="btn-register" onClick={() => handleSubmit()}>Register</button>
+      <button className="btn-register" onClick={() => handleSubmit()}>{isSignedIn ? 'Update': 'Register'}</button>
     </div>
   );
 }
 
-export default Register
+export default UserForm

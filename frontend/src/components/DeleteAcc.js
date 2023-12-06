@@ -21,7 +21,7 @@ const DeleteModal = ({ handleClose }) => {
             console.error('Account deletion failed:', errorData);
             }
         };
-
+        
     return (
         <GenericModal
         handleClose={handleClose}

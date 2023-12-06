@@ -49,12 +49,12 @@ function Navbar() {
                   <div className="dropdown-menu" aria-labelledby="userDropdown">
                     <a className="dropdown-item" onClick={openShowSignOut}>Sign Out</a>
                     <a className="dropdown-item" onClick={openShowDeleteAcc}>Delete Account</a>
-                    <a className="dropdown-item" href="/edit">Edit Account</a>
+                    <a className="dropdown-item" href="/Userform">Edit Account</a>
                   </div>
                 </li>
               ) : (
                 <li className="nav-item">
-                  <a className="nav-link" href="/register">Register</a>
+                  <a className="nav-link" href="/Userform">Register</a>
                 </li>
               )
             )}
