@@ -41,9 +41,7 @@ const UserForm = () => {
   const[formSubmitted, setFormSubmitted] = useState(false);
 
   const validateInput = (name, value) => {
-    if(isSignedIn && (name === 'email' || name === 'password') ){
-
-    }
+    if(isSignedIn && (name === 'email' || name === 'password') ) return;
     let error;
     if(name === "country"){
       error = !value ? 'Please select a country from the list' : '';
