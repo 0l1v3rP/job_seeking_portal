@@ -98,6 +98,10 @@ const UserForm = () => {
       ...formData,
       [name]: value,
     });
+    setFormErrors({
+      ...formErrors,
+      [name]: '',
+    })
   };
 
   const handleSubmit = () => {

@@ -16,8 +16,8 @@ async function getMyAccount(req, res) {
     const email = req.session.user.email;
     const user = await business.getMyAccount(email);
     return res.status(200).json({user: user});
-  } catch {
-    return res.status(400).json({ error: 'System error', });
+  } catch (error) {
+    handleServerError();
   }
 }
 
@@ -29,7 +29,7 @@ async function signIn(req, res) {
     if (validationErrors.length !== 0) {
       return res.status(400).json({ error: 'Validation failed', details: validationErrors });
     }
-
+    
     await business.signInBis(email, password);
     req.session.user = { email };
     res.status(200).json({ message: 'User signed in successfully' });
