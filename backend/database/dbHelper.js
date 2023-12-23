@@ -36,7 +36,7 @@ export async function selectRecords(query, values = []) {
 }
 
 export async function updateRecord(endPoint, dataObj, keyName, keyValue) {
-  try {
+  handleUpdateOperation(async () => {
     const values = Object.values(dataObj);
     const columns = Object.keys(dataObj);
 
@@ -44,14 +44,19 @@ export async function updateRecord(endPoint, dataObj, keyName, keyValue) {
     const whereClause = `${keyName} = $${columns.length + 1}`;
     const updateQuery = `UPDATE ${endPoint} SET ${setClause} WHERE ${whereClause}`;
 
-    const result = await client.query(updateQuery, [...values, keyValue]);
+    return await client.query(updateQuery, [...values, keyValue]);
+  }, endPoint);
+}
 
-    const successMessage = `Record in ${endPoint} updated successfully`;
-    const failureMessage = `Failed to update record in ${endPoint}`
-    handleResult(result, successMessage, failureMessage);
-  } catch (error) {
-    handleDatabaseError(`Error updating record in ${endPoint}:`, error);
-  }
+//field[0] - is attribute name
+//fiedd[1] - is value
+export async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) {
+  handleUpdateOperation(async () => {
+    const setClause = `${fieldName}=$1`;
+    const whereClause = `${keyName} = $2}`;
+    const updateQuery = `UPDATE ${endPoint} SET ${setClause} WHERE ${whereClause}`;
+    return await client.query(updateQuery, [fieldValue, keyValue]);
+  }, endPoint);
 }
 
 export async function deleteRecord(endPoint, keyName, keyValue) {
@@ -66,6 +71,18 @@ export async function deleteRecord(endPoint, keyName, keyValue) {
     handleDatabaseError(`Error deleting record in ${endPoint}:`, error);
   }
 }
+
+function handleUpdateOperation(action) {
+  try {
+    const result = action();
+    const successMessage = `Record in ${endPoint} updated successfully`;
+    const failureMessage = `Failed to update record in ${endPoint}`
+    handleResult(result, successMessage, failureMessage);
+  } catch (error) {
+    handleDatabaseError(`Error updating record in ${endPoint}:`, error);
+  }
+}
+
 
 function handleDatabaseError(message, error) {
   console.error(message, error);
@@ -83,5 +100,6 @@ function handleResult(result, successMessage, failureMessage) {
 
   export const Endpoints = {
     USER: 'user',
-    JOB: 'job'
+    JOB: 'job',
+    COMPANY: 'company'
   };
