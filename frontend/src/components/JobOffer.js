@@ -1,11 +1,11 @@
 import React from 'react'
 import './JobOffer.css'
-function JobOffer(title, location, typeOfWork, sum, companyName,image) {
+function JobOffer({title, location, typeOfWork, sum, companyName,image}) {
   return (
 
 <div className="container">
   
-    <div className='textContainer'>
+    <div className='textContainer'> 
       <h3 className='h3color'>{title}</h3>
       <p>{companyName}</p>
       <p>{location} ({typeOfWork})</p>

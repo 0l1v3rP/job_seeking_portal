@@ -1,6 +1,6 @@
 const { client } = require('./dbClient');
 
-async function insertRecord(endPoint, dataObj) {
+export async function insertRecord(endPoint, dataObj) {
   try {
     const columns = Object.keys(dataObj);
     const values = Object.values(dataObj);
@@ -14,7 +14,7 @@ async function insertRecord(endPoint, dataObj) {
   }
 }
   
-async function selectAllRecords(endPoint) {
+export async function selectAllRecords(endPoint) {
   try {
     const query = `SELECT * FROM ${endPoint}`;
     const result = await client.query(query);
@@ -25,7 +25,7 @@ async function selectAllRecords(endPoint) {
   }
 }
 
-async function selectRecords(query, values = []) {
+export async function selectRecords(query, values = []) {
   try {
     const result = await client.query(query, values);
     console.log('Select result:', result.rows);
@@ -35,7 +35,7 @@ async function selectRecords(query, values = []) {
   }
 }
 
-async function updateRecord(endPoint, dataObj, keyName, keyValue) {
+export async function updateRecord(endPoint, dataObj, keyName, keyValue) {
   try {
     const values = Object.values(dataObj);
     const columns = Object.keys(dataObj);
@@ -54,7 +54,7 @@ async function updateRecord(endPoint, dataObj, keyName, keyValue) {
   }
 }
 
-async function deleteRecord(endPoint, keyName, keyValue) {
+export async function deleteRecord(endPoint, keyName, keyValue) {
   try {
     const deleteQuery = `DELETE FROM ${endPoint} WHERE ${keyName} = $1`;
     const result = await client.query(deleteQuery, [keyValue]);
@@ -81,15 +81,7 @@ function handleResult(result, successMessage, failureMessage) {
   }
 }
 
-  const Endpoints = {
-    USER: 'users',
+  export const Endpoints = {
+    USER: 'user',
+    JOB: 'job'
   };
-  
-  module.exports = {
-    insertRecord,
-    selectRecords,
-    selectAllRecords,
-    updateRecord,
-    deleteRecord,
-    Endpoints
-  }

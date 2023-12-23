@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const {InvalidInputException} = require('../utils/exceptions'); 
+const {InvalidInputException} = require('./exceptions'); 
 
 async function hashPassword(password) {
     try {
@@ -27,7 +27,35 @@ async function  compareHashedPswds(enteredPassword, storedHashPassword){
     }
 }
 
+async function isSignedIn(req, res, next) {
+    if (req.session.user !== undefined) {
+        return next();
+    }
+    res.status(401).json({ error: 'You need to be signed in.' });
+}
+
+async function isNotSignedIn(req, res, next) {
+    if (req.session.user === undefined) {
+        return next();
+    }
+    res.status(401).json({ error: 'You cannot be signed in.' });
+}
+
+function checkSignInStatus(req, res) {
+    const isLoggedIn = req.session.user !== undefined;
+    const response = {
+        isLoggedIn,
+        user: isLoggedIn ? req.session.user : null
+    };
+    res.status(isLoggedIn ? 200 : 400).json(response);
+}
+
+  
+
 module.exports = {
     hashPassword,
-    compareHashedPswds
+    compareHashedPswds,
+    isSignedIn,
+    isNotSignedIn,
+    checkSignInStatus
 }

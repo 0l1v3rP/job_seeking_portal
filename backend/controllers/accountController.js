@@ -3,15 +3,15 @@ const ValidationService = require('../utils/validationService');
 const business = require('../businessLayer/accountBusiness');
 const { InvalidInputException } = require('../utils/exceptions');
 
-async function editUser(req, res) {
+export async function editUser(req, res) {
   await handleUserOperation(req, res, business.editUserBis);
 }
 
-async function registerUser(req, res) {
+export async function registerUser(req, res) {
   await handleUserOperation(req, res, business.registerUserBis);
 }
 
-async function getMyAccount(req, res) {
+export async function getMyAccount(req, res) {
   try {
     const email = req.session.user.email;
     const user = await business.getMyAccount(email);
@@ -21,7 +21,7 @@ async function getMyAccount(req, res) {
   }
 }
 
-async function signIn(req, res) {
+export async function signIn(req, res) {
   try {
     const { email, password } = req.body;
     const validationErrors = ValidationService.checkForNullOrEmptyPrimitive(email, password);
@@ -38,7 +38,7 @@ async function signIn(req, res) {
   }
 }
 
-async function signOut(req, res) {
+export async function signOut(req, res) {
   try {
     req.session.destroy((err) => {
       if (err) {
@@ -49,26 +49,17 @@ async function signOut(req, res) {
       res.status(200).json({ message: 'User signed out successfully' });
     });
   } catch (error) {
-    handleServerError('Error signing out:', error, res);
+    handleServerError(error, res);
   }
 }
 
-async function checkSignInStatus(req, res) {
-  try {
-    const isLoggedIn = req.session.user !== undefined;
-    res.status(200).json({ isLoggedIn, user: req.session.user || null });
-  } catch (error) {
-    handleServerError('Error checking sign-in status:', error, res);
-  }
-}
-
-async function deleteAccount(req, res) {
+export async function deleteAccount(req, res) {
   try{  
     const email = req.session.user.email;
     await business.deleteAccountBis(email);
     res.status(200).json({ message: 'User signed out successfully' });
   } catch(error){
-    handleServerError('Error deleting accout:', error, res);
+    handleServerError( error, res);
   }
 }
 
@@ -97,21 +88,6 @@ function handleSignInError(error, res) {
     console.error('Invalid input error:', error.toString());
     res.status(400).json({ error: error.message, code: error.code });
   } else {
-    handleServerError('Error in signIn:', error, res);
+    handleServerError( error, res);
   }
 }
-
-function handleServerError(logMessage, error, res) {
-  console.error(logMessage, error);
-  res.status(500).json({ error: 'Internal Server Error', code: 500 });
-}
-
-module.exports= {
-  registerUser,
-  signIn,
-  checkSignInStatus,
-  signOut,
-  editUser,
-  deleteAccount,
-  getMyAccount
-} 

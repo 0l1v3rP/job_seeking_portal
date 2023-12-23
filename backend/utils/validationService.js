@@ -12,19 +12,19 @@ function checkForNullOrEmptyCommon(items) {
     return errors;
 }
 
-function checkForNullOrEmptyObject(body) {
+export function checkForNullOrEmptyObject(body) {
     return ValidationService.checkForNullOrEmptyCommon(
         Object.values(body),
     );
 }
 
-function checkForNullOrEmptyPrimitive(...values) {
+export function checkForNullOrEmptyPrimitive(...values) {
     return ValidationService.checkForNullOrEmptyCommon(
         values,
     );
 }
 
-function validateUserData(user){
+export function validateUserData(user){
     let errors = checkForNullOrEmptyObject(user);
     if (isValidEmail(user.email)) {
         errors.push("Incorrect email format");
@@ -35,12 +35,18 @@ function validateUserData(user){
     return errors;
 }
 
-const isValidEmail = (email) => {
+function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 };
 
-const isValidZip = (zip) => {
+function isValidZip (zip) {
     const zipRegex = /^\d{5}(?:-\d{4})?$/;
     return zipRegex.test(zip);
 };
+
+export function handleServerError(error, res) {
+    const message = 'Internal Server Error';
+    console.error(messsage, error);
+    res.status(500).json({ error: message, code: 500 });
+  }

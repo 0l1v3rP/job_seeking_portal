@@ -10,7 +10,7 @@ import { useAuth } from '../../components/AuthProvider';
 const UserForm = () => {
   const { isSignedIn } = useAuth();
 
-  const navigate = useNavigate();
+  const {navigate} = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -190,13 +190,14 @@ const UserForm = () => {
     await performUserAction('register', 'User registered successfully', 'POST');
   };
   
+  
   if (isSignedIn === null) {
     return ;
   }
 
   return (
     <div className='register-form'>
-      <p className='Title'>MAKE YOUR REGISTRATION UPDATE</p>
+      <p className='Title'>{isSignedIn ? 'MAKE YOUR ACCOUNT UPDATE' : 'MAKE YOUR REGISTRATION' }</p>
       <div className="row g-3 register">   
 
         <FormField

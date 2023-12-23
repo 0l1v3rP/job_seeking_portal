@@ -1,22 +1,22 @@
 const data = require('../dataLayer/accountData')
-const {hashPassword, compareHashedPswds} = require('../utils/AuthService');
+const {hashPassword, compareHashedPswds} = require('../utils/authService');
 const { InvalidInputException } = require('../utils/exceptions');
 
-async function registerUserBis(user){
+export async function registerUserBis(user){
     const hashPasswordValue = await hashPassword(user.password);
     user.password = hashPasswordValue;
     await data.insertUser(user);
 }
 
-async function editUserBis(user){
+export async function editUserBis(user){
     await data.editUser(user);
 }
 
-async function getMyAccount(email){
+export async function getMyAccount(email){
     return data.getAccount(email);
 }
 
-async function signInBis(email, password) {
+export async function signInBis(email, password) {
     const userPswd = await data.getUserPswd(email);
     if (userPswd && userPswd.length > 0) {
         const firstUser = userPswd[0];
@@ -29,14 +29,6 @@ async function signInBis(email, password) {
     }
 }
 
-async function deleteAccountBis(email) {
+export async function deleteAccountBis(email) {
    data.deleteUser(email);
-}
-
-module.exports = {
-    registerUserBis,
-    signInBis,
-    editUserBis,
-    deleteAccountBis,
-    getMyAccount
 }

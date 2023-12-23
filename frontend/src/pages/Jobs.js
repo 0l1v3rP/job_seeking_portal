@@ -3,18 +3,32 @@ import SearchBar from '../components/SearchBar';
 import JobOffer from '../components/JobOffer';
 import Dropdown from '../components/Dropdown';
 import './Jobs.css';
+import { useAuth } from '../components/AuthProvider';
+import { useEffect, useState } from 'react';
 
 
 function Jobs() {
-  const jobData = {
-    title: 'Looking for a welder',
-    companyName: 'Lovakia Welding',
-    location: 'Zilina job with occasional home office',
-    typeOfWork: 'Full-time', // Adjust this according to your data
-    sum: '2000 eur',
-    image: './images/welding.jpg', // Adjust the image path based on your file structure
-  };
+  const { isSignedIn } = useAuth();
+  const [jobsData, setJobsData] = useState({
+    title: '',
+    companyName: '',
+    location: '',
+    arrangement: '',
+    hourlyPay: '',
+    employement: '',
+    description: ''
+  });
 
+  useEffect(() => {
+    fetch('http://localhost:8000/getJobs', {
+      credentials: 'include'
+    })
+  },[])
+
+  if (isSignedIn === null) {
+    return ;
+  }
+  
   return (
     <div>
         <br/>
@@ -27,6 +41,7 @@ function Jobs() {
               <Dropdown/>
             </div>
             <div className='col-md-7 col-lg-8'>
+            {/* <JobOffer {...jobData} />              
             <JobOffer {...jobData} />              
             <JobOffer {...jobData} />              
             <JobOffer {...jobData} />              
@@ -35,10 +50,7 @@ function Jobs() {
             <JobOffer {...jobData} />              
             <JobOffer {...jobData} />              
             <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-
-
+            <JobOffer {...jobData} />               */}
             </div>
         </div>
      </div>

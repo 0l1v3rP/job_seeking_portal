@@ -1,13 +1,12 @@
 const { Router } = require('express'); 
-const auth = require('../controllers/accountController')
-
-const app = Router(); 
+const controller = require('../controllers/accountController');
+const {isSignedIn, isNotSignedIn, checkSignInStatus} = require('../utils/authService');
+export const app = Router(); 
   
-app.post('/register',auth.registerUser); 
-app.post('/signin',auth.signIn);
-app.put('/editaccount', auth.editUser);
-app.get('/signout',auth.signOut);
-app.get('/checksigninstatus', auth.checkSignInStatus);
-app.get('/getmyaccount', auth.getMyAccount);
-app.delete('/deleteaccount', auth.deleteAccount);
-module.exports = app;
+app.post('/register', isNotSignedIn, controller.registerUser); 
+app.post('/signin', isNotSignedIn, controller.signIn);
+app.put('/editaccount', isSignedIn, controller.editUser);
+app.get('/signout', isSignedIn, controller.signOut);
+app.get('/checksigninstatus', checkSignInStatus);
+app.get('/getmyaccount', isSignedIn, controller.getMyAccount);
+app.delete('/deleteaccount', isSignedIn, controller.deleteAccount);
