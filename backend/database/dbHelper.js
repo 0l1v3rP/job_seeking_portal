@@ -1,6 +1,6 @@
 const { client } = require('./dbClient');
 
-export async function insertRecord(endPoint, dataObj) {
+async function insertRecord(endPoint, dataObj) {
   try {
     const columns = Object.keys(dataObj);
     const values = Object.values(dataObj);
@@ -14,7 +14,7 @@ export async function insertRecord(endPoint, dataObj) {
   }
 }
   
-export async function selectAllRecords(endPoint) {
+async function selectAllRecords(endPoint) {
   try {
     const query = `SELECT * FROM ${endPoint}`;
     const result = await client.query(query);
@@ -25,7 +25,7 @@ export async function selectAllRecords(endPoint) {
   }
 }
 
-export async function selectRecords(query, values = []) {
+async function selectRecords(query, values = []) {
   try {
     const result = await client.query(query, values);
     console.log('Select result:', result.rows);
@@ -35,7 +35,7 @@ export async function selectRecords(query, values = []) {
   }
 }
 
-export async function updateRecord(endPoint, dataObj, keyName, keyValue) {
+async function updateRecord(endPoint, dataObj, keyName, keyValue) {
   handleUpdateOperation(async () => {
     const values = Object.values(dataObj);
     const columns = Object.keys(dataObj);
@@ -48,9 +48,7 @@ export async function updateRecord(endPoint, dataObj, keyName, keyValue) {
   }, endPoint);
 }
 
-//field[0] - is attribute name
-//fiedd[1] - is value
-export async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) {
+async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) {
   handleUpdateOperation(async () => {
     const setClause = `${fieldName}=$1`;
     const whereClause = `${keyName} = $2}`;
@@ -59,7 +57,7 @@ export async function updateField(endPoint, fieldName, fieldValue, keyName, keyV
   }, endPoint);
 }
 
-export async function deleteRecord(endPoint, keyName, keyValue) {
+async function deleteRecord(endPoint, keyName, keyValue) {
   try {
     const deleteQuery = `DELETE FROM ${endPoint} WHERE ${keyName} = $1`;
     const result = await client.query(deleteQuery, [keyValue]);
@@ -83,7 +81,6 @@ function handleUpdateOperation(action) {
   }
 }
 
-
 function handleDatabaseError(message, error) {
   console.error(message, error);
   throw error;
@@ -98,8 +95,18 @@ function handleResult(result, successMessage, failureMessage) {
   }
 }
 
-  export const Endpoints = {
-    USER: 'user',
-    JOB: 'job',
-    COMPANY: 'company'
-  };
+const Endpoints = {
+  USER: 'user',
+  JOB: 'job',
+  COMPANY: 'company'
+};
+
+module.exports = {
+  insertRecord,
+  selectAllRecords,
+  selectRecords,
+  deleteRecord,
+  updateRecord,
+  updateField,
+  Endpoints
+}

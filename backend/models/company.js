@@ -6,3 +6,7 @@ class Company {
         this.description = description;
     }
 }
+
+export default {
+    Company
+}

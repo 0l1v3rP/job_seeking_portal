@@ -1,6 +1,6 @@
 const dbHelper = require('../database/dbHelper');
 
-export async function isCompany(email) {
+async function isCompany(email) {
     const query = `SELECT 1 FROM ${dbHelper.Endpoints.COMPANY} 
                     JOIN ${dbHelper.Endpoints.USER}
                         ON ${dbHelper.Endpoints.COMPANY}.company_id=${dbHelper.Endpoints.USER}.user_company
@@ -9,6 +9,11 @@ export async function isCompany(email) {
     return await dbHelper.selectRecords(query, [email]);
 }
 
-export async function insertCompany(company) {
+async function insertCompany(company) {
     return await dbHelper.insertRecord(dbHelper.Endpoints.COMPANY, company);
+}
+
+module.exports = {
+    isCompany,
+    insertCompany
 }

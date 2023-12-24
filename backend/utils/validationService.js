@@ -1,30 +1,32 @@
-function checkForNullOrEmptyCommon(items) {
+const {ValidationException} = require('./exceptions');
+
+function checkForNullOrEmpty(...items) {
     const errors = [];
 
     items.forEach((item) => {
         if (item === undefined || item === null || item === '') {
-            const errorMessage = `${item}: is null or empty`;
-            errors.push(errorMessage);
+            const errorMessage = 'value is null or empty';
             console.error(errorMessage);
+            throw new ValidationException(errorMessage);
         }
     });
 
     return errors;
 }
 
-export function checkForNullOrEmptyObject(body) {
-    return ValidationService.checkForNullOrEmptyCommon(
-        Object.values(body),
-    );
-}
+// function checkForNullOrEmptyObject(body) {
+//     return checkForNullOrEmptyCommon(
+//         Object.values(body),
+//     );
+// }
 
-export function checkForNullOrEmptyPrimitive(...values) {
-    return ValidationService.checkForNullOrEmptyCommon(
-        values,
-    );
-}
+// function checkForNullOrEmptyPrimitive(...values) {
+//     return checkForNullOrEmptyCommon(
+//         values,
+//     );
+// }
 
-export function validateUserData(user){
+function validateUserData(user){
     let errors = checkForNullOrEmptyObject(user);
     if (isValidEmail(user.email)) {
         errors.push("Incorrect email format");
@@ -45,8 +47,14 @@ function isValidZip (zip) {
     return zipRegex.test(zip);
 };
 
-export function handleServerError(error, res) {
+function handleServerError(error, res) {
     const message = 'Internal Server Error';
     console.error(messsage, error);
     res.status(500).json({ error: message, code: 500 });
   }
+
+module.exports = {
+    checkForNullOrEmpty,
+    validateUserData,
+    handleServerError
+}

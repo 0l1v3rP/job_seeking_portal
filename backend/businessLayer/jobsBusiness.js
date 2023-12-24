@@ -1,5 +1,9 @@
 const data = require('../dataLayer/jobsData');
 
-export async function getAllJobs() {
+async function getAllJobs() {
     return await data.getAllJobs();
+}
+
+module.exports = {
+    getAllJobs
 }

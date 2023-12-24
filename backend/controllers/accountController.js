@@ -1,17 +1,17 @@
 const User = require('../models/user');
 const ValidationService = require('../utils/validationService');
 const business = require('../businessLayer/accountBusiness');
-const { InvalidInputException } = require('../utils/exceptions');
+const { InvalidInputException } = require('../utils/exceptions').default;
 
-export async function editUser(req, res) {
+async function editUser(req, res) {
   await handleUserOperation(req, res, business.editUserBis);
 }
 
-export async function registerUser(req, res) {
+async function registerUser(req, res) {
   await handleUserOperation(req, res, business.registerUserBis);
 }
 
-export async function getMyAccount(req, res) {
+async function getMyAccount(req, res) {
   try {
     const email = req.session.user.email;
     const user = await business.getMyAccount(email);
@@ -21,10 +21,10 @@ export async function getMyAccount(req, res) {
   }
 }
 
-export async function signIn(req, res) {
+async function signIn(req, res) {
   try {
     const { email, password } = req.body;
-    const validationErrors = ValidationService.checkForNullOrEmptyPrimitive(email, password);
+    const validationErrors = ValidationService.checkForNullOrEmpty(email, password);
 
     if (validationErrors.length !== 0) {
       return res.status(400).json({ error: 'Validation failed', details: validationErrors });
@@ -38,7 +38,7 @@ export async function signIn(req, res) {
   }
 }
 
-export async function signOut(req, res) {
+async function signOut(req, res) {
   try {
     req.session.destroy((err) => {
       if (err) {
@@ -53,7 +53,7 @@ export async function signOut(req, res) {
   }
 }
 
-export async function deleteAccount(req, res) {
+async function deleteAccount(req, res) {
   try{  
     const email = req.session.user.email;
     await business.deleteAccountBis(email);
@@ -63,10 +63,10 @@ export async function deleteAccount(req, res) {
   }
 }
 
-async function handleUserOperation(req, res, operationCallback) {
+async function handleUserOperation(req, res, operationCallback) { 
   try {
     const userData = req.body;
-    const validationErrors = ValidationService.checkForNullOrEmptyObject(userData);
+    const validationErrors = ValidationService.checkForNullOrEmpty(...Object.values(userData));
     if (validationErrors.length !== 0) {
       return res.status(400).json({ error: 'Validation failed', details: validationErrors });
     }
@@ -90,4 +90,13 @@ function handleSignInError(error, res) {
   } else {
     handleServerError( error, res);
   }
+}
+
+module.exports = {
+  editUser,
+  registerUser,
+  getMyAccount,
+  signIn,
+  signOut,
+  deleteAccount
 }

@@ -6,6 +6,8 @@ const client = new Client({
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
-  });
+});
 
-module.exports = {client}; 
+module.exports = {
+  client
+}

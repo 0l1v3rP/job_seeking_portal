@@ -8,3 +8,7 @@ class Job {
         this.employer = employer
     }
 }
+
+export default {
+    Job
+}
