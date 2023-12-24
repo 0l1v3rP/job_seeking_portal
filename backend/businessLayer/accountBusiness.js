@@ -1,11 +1,11 @@
 const data = require('../dataLayer/accountData')
 const {hashPassword, compareHashedPswds} = require('../utils/authService');
-const { InvalidInputException } = require('../utils/exceptions').default;
+const { InvalidInputException } = require('../utils/exceptions');
 
 async function registerUserBis(user){
-const hashPasswordValue = await hashPassword(user.password);
-user.password = hashPasswordValue;
-await data.insertUser(user);
+    const hashPasswordValue = await hashPassword(user.password);
+    user.password = hashPasswordValue;
+    await data.insertUser(user);
 }
 
 async function editUserBis(user){

@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const ValidationService = require('../utils/validationService');
 const business = require('../businessLayer/accountBusiness');
-const { InvalidInputException } = require('../utils/exceptions').default;
+const { InvalidInputException } = require('../utils/exceptions');
 
 async function editUser(req, res) {
   await handleUserOperation(req, res, business.editUserBis);
@@ -79,7 +79,7 @@ async function handleUserOperation(req, res, operationCallback) {
     res.status(200).json({ message: `User ${operationCallback.name} successfully` });
   } catch (error) {
     console.error(`Error in ${operationCallback.name}:`, error);
-    res.status(500).json({ error: `Failed to ${operationCallback.name} user. Please try again later.` });
+    ValidationService.handleServerError(error,res)
   }
 }
 

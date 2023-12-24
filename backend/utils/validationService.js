@@ -49,7 +49,7 @@ function isValidZip (zip) {
 
 function handleServerError(error, res) {
     const message = 'Internal Server Error';
-    console.error(messsage, error);
+    console.error(message, error);
     res.status(500).json({ error: message, code: 500 });
   }
 

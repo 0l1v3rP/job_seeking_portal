@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const {InvalidInputException} = require('./exceptions').default; 
+const {InvalidInputException} = require('./exceptions'); 
 
 async function hashPassword(password) {
     try {

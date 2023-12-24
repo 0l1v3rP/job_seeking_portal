@@ -1,4 +1,4 @@
-const business = require('../businnessLayer/companyBusiness');
+const business = require('../businessLayer/companyBusiness');
 const ValidationService = require('../utils/validationService');
 
 async function isCompany(req, res) {

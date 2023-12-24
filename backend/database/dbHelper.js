@@ -4,10 +4,10 @@ async function insertRecord(endPoint, dataObj) {
   try {
     const columns = Object.keys(dataObj);
     const values = Object.values(dataObj);
-    const query = `INSERT INTO ${endPoint} (${columns.join(', ')}) VALUES (${values.map((_, i) => `$${1 + i}`).join(', ')}) RETURNING *`;
+    const query = `INSERT INTO "${endPoint}" (${columns.join(', ')}) VALUES (${values.map((_, i) => `$${1 + i}`).join(', ')}) RETURNING *`;
 
     console.log('Inserting record into:', endPoint);
-    const result = await client.query(query, values);
+      const result = await client.query(query, values);
     console.log('Insert result:', result.rows[0]);
   } catch (error) {
     handleDatabaseError('Error inserting into database:', error);
@@ -16,7 +16,7 @@ async function insertRecord(endPoint, dataObj) {
   
 async function selectAllRecords(endPoint) {
   try {
-    const query = `SELECT * FROM ${endPoint}`;
+    const query = `SELECT * FROM "${endPoint}"`;
     const result = await client.query(query);
     console.log('Select all result:', result.rows);
     return result.rows;
@@ -42,7 +42,7 @@ async function updateRecord(endPoint, dataObj, keyName, keyValue) {
 
     const setClause = columns.map((col, index) => `${col} = $${index + 1}`).join(', ');
     const whereClause = `${keyName} = $${columns.length + 1}`;
-    const updateQuery = `UPDATE ${endPoint} SET ${setClause} WHERE ${whereClause}`;
+    const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause}`;
 
     return await client.query(updateQuery, [...values, keyValue]);
   }, endPoint);
@@ -52,14 +52,14 @@ async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) 
   handleUpdateOperation(async () => {
     const setClause = `${fieldName}=$1`;
     const whereClause = `${keyName} = $2}`;
-    const updateQuery = `UPDATE ${endPoint} SET ${setClause} WHERE ${whereClause}`;
+    const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause}`;
     return await client.query(updateQuery, [fieldValue, keyValue]);
   }, endPoint);
 }
 
 async function deleteRecord(endPoint, keyName, keyValue) {
   try {
-    const deleteQuery = `DELETE FROM ${endPoint} WHERE ${keyName} = $1`;
+    const deleteQuery = `DELETE FROM "${endPoint}" WHERE ${keyName} = $1`;
     const result = await client.query(deleteQuery, [keyValue]);
 
     const successMessage = `Record in ${endPoint} deleted successfully`;

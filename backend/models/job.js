@@ -9,6 +9,6 @@ class Job {
     }
 }
 
-export default {
+module.exports = {
     Job
 }

@@ -7,6 +7,6 @@ class Company {
     }
 }
 
-export default {
+module.exports = {
     Company
 }
