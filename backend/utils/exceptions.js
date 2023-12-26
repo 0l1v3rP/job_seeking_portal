@@ -6,13 +6,19 @@ class BaseException extends Error {
   }
 
   toString() {
-    return `${this.name} (${this.code}): ${this.message}`;
+    return `${this.name}: ${this.message}`;
   }
 }
 
+class AuthorizationException extends BaseException {
+  constructor(message, code, error) {
+    super(message, code, error);
+  } 
+}
+
 class InvalidInputException extends BaseException {
-  constructor(message, code) {
-    super(message, code);
+  constructor(message, code, error) {
+    super(message, code, error);
   } 
 }
 
@@ -28,8 +34,30 @@ class ValidationException extends BaseException {
   }
 }
 
+class UnsuccessfullOperationException extends BaseException {
+  constructor(message, code) {
+    super(message, code);
+  }
+}
+
+class UnseccessfullResultException extends BaseException {
+  constructor(message, code) {
+    super(message, code);
+  }
+}
+
+class DatabaseErrorException extends BaseException {
+  constructor(message, code) {
+    super(message, code);
+  }
+}
+
 module.exports = {
   InvalidInputException,
   PasswordsDontMatchException,
-  ValidationException
+  ValidationException,
+  DatabaseErrorException,
+  UnseccessfullResultException,
+  UnsuccessfullOperationException,
+  AuthorizationException
 }

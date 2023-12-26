@@ -9,6 +9,7 @@ async function disconnectFromDatabase() {
     await client.end();
     console.log('Disconnected from the database');
 }
+
 module.exports = {
     connectToDatabase,
     disconnectFromDatabase

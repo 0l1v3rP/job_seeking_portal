@@ -10,7 +10,7 @@ import { useAuth } from '../../components/AuthProvider';
 const UserForm = () => {
   const { isSignedIn } = useAuth();
 
-  const {navigate} = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -64,7 +64,7 @@ const UserForm = () => {
     if(!error){
       switch (name) {
         case 'password':
-          error = value.length < 6 ? 'pswd should be at least 6 chars long' : '';
+          error = value.length < 6 ? 'password should be at least 6 chars long' : '';
           break;
         case 'email':
           error = !isValidEmail(value) ? 'Invalid email format' : '';

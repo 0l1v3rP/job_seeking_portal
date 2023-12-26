@@ -1,5 +1,5 @@
 const business = require('../businessLayer/companyBusiness');
-const ValidationService = require('../utils/validationService');
+const ValidationService = require('../utils/validationUserService');
 
 async function isCompany(req, res) {
     try{
@@ -11,6 +11,7 @@ async function isCompany(req, res) {
 }
 
 async function createCompany(req, res) {
+    
 }
 
 module.exports = {

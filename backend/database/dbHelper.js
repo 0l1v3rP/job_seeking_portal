@@ -1,7 +1,8 @@
 const { client } = require('./dbClient');
+const {UnsuccessfullOperationException, DatabaseErrorException} = require('../utils/exceptions');
 
 async function insertRecord(endPoint, dataObj) {
-  try {
+  await handleDatabaseOperation(async () => {
     const columns = Object.keys(dataObj);
     const values = Object.values(dataObj);
     const query = `INSERT INTO "${endPoint}" (${columns.join(', ')}) VALUES (${values.map((_, i) => `$${1 + i}`).join(', ')}) RETURNING *`;
@@ -9,81 +10,74 @@ async function insertRecord(endPoint, dataObj) {
     console.log('Inserting record into:', endPoint);
       const result = await client.query(query, values);
     console.log('Insert result:', result.rows[0]);
-  } catch (error) {
-    handleDatabaseError('Error inserting into database:', error);
-  }
-}
-  
+  }, `Error inserting into database | table: ${endPoint}`);
+} 
+
 async function selectAllRecords(endPoint) {
-  try {
+  return await handleDatabaseOperation(async () => {
     const query = `SELECT * FROM "${endPoint}"`;
     const result = await client.query(query);
     console.log('Select all result:', result.rows);
     return result.rows;
-  } catch (error) {
-    handleDatabaseError('Error selecting from database:', error);
-  }
+  },`Error selecting from database | table: ${endPoint}`);
+  
 }
 
 async function selectRecords(query, values = []) {
-  try {
+  return await handleDatabaseOperation(async () => {
     const result = await client.query(query, values);
     console.log('Select result:', result.rows);
     return result.rows;
-  } catch (error) {
-    handleDatabaseError('Error selecting from database:', error);
-  }
+  }, `Error selecting from database`);
 }
 
 async function updateRecord(endPoint, dataObj, keyName, keyValue) {
-  handleUpdateOperation(async () => {
+  return await handleUpdateOperation(async () => {
     const values = Object.values(dataObj);
     const columns = Object.keys(dataObj);
-
     const setClause = columns.map((col, index) => `${col} = $${index + 1}`).join(', ');
     const whereClause = `${keyName} = $${columns.length + 1}`;
-    const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause}`;
-
+    const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
     return await client.query(updateQuery, [...values, keyValue]);
   }, endPoint);
 }
 
 async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) {
-  handleUpdateOperation(async () => {
+  return await handleUpdateOperation(async () => {
     const setClause = `${fieldName}=$1`;
     const whereClause = `${keyName} = $2}`;
-    const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause}`;
+    const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
     return await client.query(updateQuery, [fieldValue, keyValue]);
   }, endPoint);
 }
 
 async function deleteRecord(endPoint, keyName, keyValue) {
-  try {
+  await handleDatabaseOperation(async () => {
     const deleteQuery = `DELETE FROM "${endPoint}" WHERE ${keyName} = $1`;
     const result = await client.query(deleteQuery, [keyValue]);
-
     const successMessage = `Record in ${endPoint} deleted successfully`;
     const failureMessage = `No record found in ${endPoint} with ${keyName} = ${keyValue}`;
     handleResult(result, successMessage, failureMessage);
-  } catch (error) {
-    handleDatabaseError(`Error deleting record in ${endPoint}:`, error);
-  }
+  },`Error deleting record from database | table: ${endPoint}`);
 }
 
-function handleUpdateOperation(action) {
-  try {
-    const result = action();
+//---------------------------HANDLER FUNCTIONS FOR DATABASE OPERATIONS------------------------------- 
+
+async function handleUpdateOperation(action, endPoint) {
+  await handleDatabaseOperation(async () => {
+    const result = await action();
     const successMessage = `Record in ${endPoint} updated successfully`;
     const failureMessage = `Failed to update record in ${endPoint}`
     handleResult(result, successMessage, failureMessage);
-  } catch (error) {
-    handleDatabaseError(`Error updating record in ${endPoint}:`, error);
-  }
+  }, `Error updating database | table: ${endPoint}`);
 }
 
-function handleDatabaseError(message, error) {
-  console.error(message, error);
-  throw error;
+async function handleDatabaseOperation(action, message) {
+  try {
+    return await action();
+  } catch (er){
+    console.error(message);
+    throw new DatabaseErrorException(message, 401)  } 
 }
 
 function handleResult(result, successMessage, failureMessage) {
@@ -91,9 +85,12 @@ function handleResult(result, successMessage, failureMessage) {
     console.log(successMessage);
   } else {
     console.error(failureMessage);
-    throw new Error(failureMessage);
+    throw new UnsuccessfullOperationException(failureMessage);
   }
 }
+
+//----------------------------------------------------------------------------------------------------
+
 
 const Endpoints = {
   USER: 'user',

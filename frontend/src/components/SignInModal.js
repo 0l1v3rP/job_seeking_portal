@@ -6,7 +6,7 @@ import { useAuth } from './AuthProvider';
 const SignInModal = ({ show, handleClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {isSignedIn, setSignedIn} = useAuth();
+  const {setSignedIn} = useAuth();
 
 
   async function signIn() {
@@ -34,7 +34,7 @@ const SignInModal = ({ show, handleClose }) => {
   }
 
   const handleSignIn = async () => {
-    console.log('Signing in with:', email, password);
+    console.log('Signing in with email: ', email);
     await signIn();
   };
 

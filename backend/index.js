@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 const {connectToDatabase, disconnectFromDatabase } = require('./database/dbConnection');
 const session = require('express-session');
 const app = express();
-
+const {handleResponseError, handleResponseSuccess} = require('./utils/responseHelper')
+ 
 //------------------------ROUTERS---------------------
 const auth = require('./routers/accountRouter');
 const jobs = require('./routers/jobsRouter');
@@ -38,6 +39,9 @@ app.use(cors(corsOptions));
 app.use(auth);
 app.use(jobs);
 app.use(company);
+
+app.use(handleResponseSuccess);
+app.use(handleResponseError);
 
 const port = process.env.PORT || 8000;
 

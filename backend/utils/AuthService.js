@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const {InvalidInputException} = require('./exceptions'); 
+const {InvalidInputException, AuthorizationException} = require('./exceptions'); 
+const {handleResponseSync, payload} = require('./responseHelper');
 
 async function hashPassword(password) {
     try {
@@ -13,44 +14,42 @@ async function hashPassword(password) {
     }
 }
 
-async function  compareHashedPswds(enteredPassword, storedHashPassword){
-    try{
-        const passwordsMatch = await bcrypt.compare(enteredPassword, storedHashPassword);
-        if (passwordsMatch) {
-          console.log('Passwords match');
-        } else {
-          console.log('Passwords don\'t match');
-          throw new InvalidInputException('Wrong password');
-        }    } catch(err){
-        console.error('Error comparing password', err.message);
-        throw err;
-    }
+async function compareHashedPswds(enteredPassword, storedHashPassword){
+    const passwordsMatch = await bcrypt.compare(enteredPassword, storedHashPassword);
+    if (passwordsMatch) {
+        console.log('Passwords match');
+    } else {
+        console.log('Passwords don\'t match');
+        throw new InvalidInputException('Wrong password');
+    }        
 }
 
-async function isSignedIn(req, res, next) {
-    if (req.session.user !== undefined) {
-        return next();
-    }
-    res.status(401).json({ error: 'You need to be signed in.' });
+function isSignedIn(req, res, next) {
+    handleResponseSync(() => {
+        if (req.session.user === undefined) {
+            throw new AuthorizationException('You need to be signed in', 401);
+        }
+    }, next);
 }
 
-async function isNotSignedIn(req, res, next) {
-    if (req.session.user === undefined) {
-        return next();
-    }
-    res.status(401).json({ error: 'You cannot be signed in.' });
+function isNotSignedIn(req, res, next) {
+    handleResponseSync(() => {
+        if (req.session.user !== undefined) {
+            throw new AuthorizationException('You cannot be signed in', 401);
+        }
+    }, next);
 }
 
-function checkSignInStatus(req, res) {
-    const isLoggedIn = req.session.user !== undefined;
-    const response = {
-        isLoggedIn,
-        user: isLoggedIn ? req.session.user : null
-    };
-    res.status(isLoggedIn ? 200 : 400).json(response);
+function checkSignInStatus(req, res, next) {
+    handleResponseSync(() => {
+        const isLoggedIn = req.session.user !== undefined;
+        payload({
+            isLoggedIn,
+            user: isLoggedIn ? req.session.user : null
+        });
+    }, next);
 }
 
-  
 
 module.exports = {
     hashPassword,
