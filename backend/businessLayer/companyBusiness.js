@@ -1,7 +1,8 @@
 const data = require('../dataLayer/companyData');
+const {getAccount} = require('../dataLayer/userData')
 
-async function isCompany(email) {
-    company = await data.isCompany(email);
+async function getCompany(email) {
+    return (await data.getUserCompany(email))[0];
 }
 
 module.exports = {

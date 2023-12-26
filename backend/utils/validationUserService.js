@@ -15,12 +15,12 @@ function checkForNullOrEmpty(...items) {
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-};
+}
 
 function isValidZip (zip) {
     const zipRegex = /^\d{5}(?:-\d{4})?$/;
     return zipRegex.test(zip);
-};
+}
 
 async function validateUserAcc(req, res, next) {
     handleResponseSync(() => {
@@ -29,7 +29,6 @@ async function validateUserAcc(req, res, next) {
         res.locals.email = email;
         res.locals.password = password;
     }, next);
-
 }
 
 function validateUser(req, res, next) {

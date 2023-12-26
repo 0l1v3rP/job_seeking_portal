@@ -21,7 +21,7 @@ async function registerUser(req, res, next) {
 async function getMyAccount(req, res, next) {
   await handleResponseAsync(async () => {
     const email = res.locals.user.email;
-    const user = await business.getMyAccount(email);
+    const user = (await business.getMyAccount(email));
     payload({user: user});
   }, next);
 }
@@ -31,7 +31,7 @@ async function signIn(req, res, next) {
     const password = res.locals.password;
     const email = res.locals.email;
     await business.signIn(email, password);
-    req.session.user = { email };
+    req.session.user = { email }; //setting session
     payload({ message: 'User signed in successfully' });
   }, next);
 }

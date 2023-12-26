@@ -1,16 +1,56 @@
-class User {
-    constructor(body){
-        this.firstName = body.firstName;
-        this.lastName = body.lastName;
-        this.username = body.username;
-        this.email = body.email;
-        this.address = body.address;
-        if(body.password) {
-            this.password = body.password;
+const company = require("./company");
+
+class UserDTO {
+    constructor(data){
+        this.firstName = data.firstName;
+        this.lastName = data.lastName;
+        this.username = data.username;
+        this.email = data.email;
+        this.address = data.address;
+        if(data.password) {
+            this.password = data.password;
         }
-        this.country = body.country;
-        this.zip = body.zip;
+        if(data.company) {
+            this.company = data.company;
+        }
+        this.country = data.country;
+        this.zip = data.zip;
+    }
+
+    toDBFormat() {
+        const dbFormat = {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            username: this.username,
+            email: this.email,
+            address: this.address,
+            country: this.country,
+            zip: this.zip
+        };
+        
+        if(this.password) {
+            dbFormat.password = this.password;
+        }
+        if(this.company) {
+            dbFormat.user_company = company;
+        }
+
+        return dbFormat;
+    }
+
+    static fromDBFormat(dbData) {
+        return new UserDTO({
+            firstName: dbData.first_name,
+            lastName: dbData.last_name,
+            username: dbData.username,
+            email: dbData.email,
+            address: dbData.address,
+            password: dbData.password,
+            country: dbData.country,
+            zip: dbData.zip,
+            company: dbData.user_company
+        });
     }
 }
   
-module.exports = User
+module.exports = UserDTO

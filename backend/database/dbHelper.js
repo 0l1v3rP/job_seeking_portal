@@ -6,9 +6,7 @@ async function insertRecord(endPoint, dataObj) {
     const columns = Object.keys(dataObj);
     const values = Object.values(dataObj);
     const query = `INSERT INTO "${endPoint}" (${columns.join(', ')}) VALUES (${values.map((_, i) => `$${1 + i}`).join(', ')}) RETURNING *`;
-
-    console.log('Inserting record into:', endPoint);
-      const result = await client.query(query, values);
+    const result = await client.query(query, values);
     console.log('Insert result:', result.rows[0]);
   }, `Error inserting into database | table: ${endPoint}`);
 } 
@@ -20,7 +18,6 @@ async function selectAllRecords(endPoint) {
     console.log('Select all result:', result.rows);
     return result.rows;
   },`Error selecting from database | table: ${endPoint}`);
-  
 }
 
 async function selectRecords(query, values = []) {
@@ -38,7 +35,9 @@ async function updateRecord(endPoint, dataObj, keyName, keyValue) {
     const setClause = columns.map((col, index) => `${col} = $${index + 1}`).join(', ');
     const whereClause = `${keyName} = $${columns.length + 1}`;
     const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
-    return await client.query(updateQuery, [...values, keyValue]);
+    const result = await client.query(updateQuery, [...values, keyValue]);
+    console.log('Update result:', result.rows);
+    return result;
   }, endPoint);
 }
 
@@ -47,7 +46,9 @@ async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) 
     const setClause = `${fieldName}=$1`;
     const whereClause = `${keyName} = $2}`;
     const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
-    return await client.query(updateQuery, [fieldValue, keyValue]);
+    const result = await client.query(updateQuery, [fieldValue, keyValue]);
+    console.log('Update result:', result.rows);
+    return result;
   }, endPoint);
 }
 
@@ -75,7 +76,7 @@ async function handleUpdateOperation(action, endPoint) {
 async function handleDatabaseOperation(action, message) {
   try {
     return await action();
-  } catch (er){
+  } catch {
     console.error(message);
     throw new DatabaseErrorException(message, 401)  } 
 }
@@ -90,7 +91,6 @@ function handleResult(result, successMessage, failureMessage) {
 }
 
 //----------------------------------------------------------------------------------------------------
-
 
 const Endpoints = {
   USER: 'user',

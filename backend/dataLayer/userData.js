@@ -1,7 +1,11 @@
 const dbHelper = require('../database/dbHelper');
+const UserDTO = require('../models/user')
 
 async function insertUser(user) {
-    return await dbHelper.insertRecord(dbHelper.Endpoints.USER ,user);
+    const dbUser = user.toDBFormat();
+    const result = await dbHelper.insertRecord(dbHelper.Endpoints.USER ,dbUser);
+    const resultModel = UserDTO.fromDBFormat(result);
+    return resultModel;
 }
 
 async function getUserPswd(email) {
@@ -10,8 +14,11 @@ async function getUserPswd(email) {
 }
 
 async function editUser(user) {
+    const dbUser = user.toDBFormat();
     const keyName = 'email';
-    await dbHelper.updateRecord(dbHelper.Endpoints.USER ,user, keyName, user.email);
+    const result = await dbHelper.updateRecord(dbHelper.Endpoints.USER ,dbUser, keyName, user.email);
+    const resultModel = UserDTO.fromDBFormat(result);
+    return resultModel;
 }
 
 async function deleteUser(email) {
@@ -20,14 +27,17 @@ async function deleteUser(email) {
 
 async function getAccount(email) {
     const query = `SELECT * FROM "${dbHelper.Endpoints.USER}" WHERE email = '$1'`;
-    const result = (await dbHelper.selectRecords(query, [email]))[0];
-    return result;
+    const result = await dbHelper.selectRecords(query, [email]);
+    const resultModel = UserDTO.fromDBFormat(result[0]);
+    return resultModel;
 }
 
 async function registerToCompany(companyId, email) {
     const fieldName = 'user_company';
     const keyName = 'email';
     await dbHelper.updateField(dbHelper.Endpoints.USER, fieldName, companyId, keyName, email); 
+    const resultModel = UserDTO.fromDBFormat(result);
+    return resultModel;
 }
 
 module.exports = {

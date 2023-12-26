@@ -1,12 +1,28 @@
-class Company {
-    constructor(name, admin, logoPath, description) {
-        this.name = name;
-        this.admin = admin;
-        this.logoPath = logoPath;
-        this.description = description;
+class CompanyDTO {
+    constructor(data) {
+        this.name = data.name;
+        this.admin = data.admin;
+        this.logoPath = data.logoPath;
+        this.description = data.description;
+    }
+
+    toDBFormat() {
+        return {
+            name: this.name,
+            admin: this.admin,
+            logo_path: this.logoPath,
+            description: this.description
+        } 
+    }
+
+    static fromDBFormat(dbData) {
+        new CompanyDTO({
+            name: dbData.name,
+            admin: dbData.admin,
+            logoPath: logo_path,
+            description: description
+        })
     }
 }
 
-module.exports = {
-    Company
-}
+module.exports = CompanyDTO

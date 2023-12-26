@@ -1,17 +1,10 @@
 const business = require('../businessLayer/companyBusiness');
-const ValidationService = require('../utils/validationUserService');
+const {handleResponseAsync, handleResponseSync, payload} = require('../utils/responseHelper');
 
-async function isCompany(req, res) {
-    try{
-        const email = req.session.user.email;
-        business.isCompany(email);
-    } catch (error) {
-        ValidationService.handleServerError(error, res);
-    }
-}
-
-async function createCompany(req, res) {
-    
+async function getCompany(res, req, next) {
+    await handleResponseAsync( async () => {
+        const company = business.getCompany();
+    }, next);
 }
 
 module.exports = {

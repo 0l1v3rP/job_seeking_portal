@@ -16,7 +16,6 @@ async function getMyAccount(email){
     return await data.getAccount(email);
 }
 
-//TODO: refactor
 async function signIn(email, password) {
     const userPswd = (await data.getUserPswd(email))[0];
     if (userPswd) {
@@ -29,12 +28,6 @@ async function signIn(email, password) {
 
 async function deleteAccount(email) {
     await data.deleteUser(email);
-}
-
-//TODO implement
-async function userExist(email) {
-    return await data.getAccount(email);
-    
 }
 
 module.exports = {
