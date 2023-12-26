@@ -1,7 +1,7 @@
 const { Router } = require('express'); 
 const controller = require('../controllers/userController');
 const {isSignedIn, isNotSignedIn, checkSignInStatus} = require('../utils/authService');
-const {validateUser, validateUserAcc, checkIfUserAlreadyExist} = require('../utils/validationUserService');
+const {validateUser, validateUserAcc, checkIfUserAlreadyExist} = require('../ValidationServices/validationUserService');
 const { destroySession, saveSessionMail } = require('../utils/sessionHelper');
 const app = Router(); 
   

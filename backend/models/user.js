@@ -1,5 +1,3 @@
-const company = require("./company");
-
 class UserDTO {
     constructor(data){
         this.firstName = data.firstName;
@@ -27,12 +25,12 @@ class UserDTO {
             country: this.country,
             zip: this.zip
         };
-        
+
         if(this.password) {
             dbFormat.password = this.password;
         }
         if(this.company) {
-            dbFormat.user_company = company;
+            dbFormat.user_company = this.company;
         }
 
         return dbFormat;

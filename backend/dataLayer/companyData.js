@@ -8,7 +8,7 @@ async function insertCompany(company) {
     return resultModel
 }
 
-async function isCompany(email) {
+async function companyExist(email) {
     const query = getUserCompanyQuery('1');
     return await dbHelper.selectRecords(query, [email]);
 }
@@ -27,6 +27,5 @@ function getUserCompanyQuery(select) {
         WHERE ${dbHelper.Endpoints.USER}.email=$1 LIMIT 1`
 }
 module.exports = {
-    isCompany,
     insertCompany
 }

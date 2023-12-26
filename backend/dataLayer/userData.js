@@ -1,5 +1,6 @@
 const dbHelper = require('../database/dbHelper');
 const UserDTO = require('../models/user')
+const {mapAllFromDbFormat} = require('../utils/mapper')
 
 async function insertUser(user) {
     const dbUser = user.toDBFormat();
@@ -26,9 +27,21 @@ async function deleteUser(email) {
 }
 
 async function getAccount(email) {
-    const query = `SELECT * FROM "${dbHelper.Endpoints.USER}" WHERE email = '$1'`;
+    const query = `SELECT * FROM "${dbHelper.Endpoints.USER}" WHERE email = $1`;
     const result = await dbHelper.selectRecords(query, [email]);
     const resultModel = UserDTO.fromDBFormat(result[0]);
+    return resultModel;
+}
+
+async function userExist(email) {
+    const query = `SELECT 1 FROM "${dbHelper.Endpoints.USER}" WHERE email = $1`;
+    const result = await dbHelper.selectRecords(query, [email]);
+    return result;
+}
+
+async function getAllUsers() {
+    const result = await dbHelper.selectAllRecords(dbHelper.Endpoints.USER);
+    const resultModel = mapAllFromDbFormat(result, UserDTO);
     return resultModel;
 }
 
@@ -46,6 +59,7 @@ module.exports = {
     editUser,
     deleteUser,
     getAccount,
-    registerToCompany
+    registerToCompany,
+    userExist,
+    getAllUsers
 }
-

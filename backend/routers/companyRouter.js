@@ -3,7 +3,6 @@ const company = require('../controllers/companyController')
 const {isSignedIn} = require('../utils/authService');
 const app = Router(); 
 
-app.post('/createCompany',company.createCompany);
-app.get('/isCompany', isSignedIn, company.isCompany);
+app.get('/getCompany', isSignedIn, company.getCompany);
 
 module.exports = app;

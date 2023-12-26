@@ -4,14 +4,9 @@ const {InvalidInputException, AuthorizationException} = require('./exceptions');
 const {handleResponseSync, payload} = require('./responseHelper');
 
 async function hashPassword(password) {
-    try {
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
         return hashedPassword;
-    } catch (error) {
-        console.error('Error hashing password:', error);
-        throw error;
-    }
 }
 
 async function compareHashedPswds(enteredPassword, storedHashPassword){

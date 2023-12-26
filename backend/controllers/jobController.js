@@ -9,5 +9,5 @@ async function getAllJobs(req, res, next) {
 }
 
 module.exports = {
-    getAllJobs
+    getAllJobs,
 }

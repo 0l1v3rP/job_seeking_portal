@@ -1,16 +1,8 @@
-const {ValidationException} = require('./exceptions');
+const {ValidationException} = require('../utils/exceptions');
 const User = require('../models/user');
-const {handleResponseSync} = require('./responseHelper')
-
-function checkForNullOrEmpty(...items) {
-    const errors = [];
-    items.forEach((item) => {
-        if (item === undefined || item === null || item === '') {
-            throw new ValidationException('value is null or empty', 403);
-        }
-    });
-    return errors;
-}
+const {handleResponseSync, handleResponseAsync} = require('../utils/responseHelper');
+const {checkForNullOrEmpty} = require('./validationCommonService');
+const {getAllUsers} = require('../dataLayer/userData');
 
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,7 +28,7 @@ function validateUser(req, res, next) {
         const userData = req.body;
         validateUserData(userData);
         const user = new User(userData);
-        if(req.session.user) { //if user has session, add an email to user and send it to the next middlware function
+        if(req.session.user) { //if user has session, add an email to user 
             user.email = req.session.user.email;
         }
         res.locals.user = user;
@@ -54,9 +46,21 @@ function validateUserData(user){
 }
 
 
-//TODO: implement checkIfUserExists function
 async function checkIfUserAlreadyExist(req,res,next) {
-    next();
+    await handleResponseAsync( async () => {
+        const users = await getAllUsers();
+
+        const existEmail = users.find(u => u.email === '');
+        if(existEmail) {
+            throw new ValidationException('User with same email already exists', 403);
+        }
+
+        const existUsername = users.find(u => u.username === '');
+        if(existUsername) {
+            throw new ValidationException('User with same username already exists', 403);
+        }
+
+    }, next)
 }
 
 module.exports = {

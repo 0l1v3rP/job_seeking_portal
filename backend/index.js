@@ -8,7 +8,7 @@ const app = express();
 const {handleResponseError, handleResponseSuccess} = require('./utils/responseHelper')
  
 //------------------------ROUTERS---------------------
-const auth = require('./routers/accountRouter');
+const user = require('./routers/userRouter');
 const jobs = require('./routers/jobsRouter');
 const company = require('./routers/companyRouter');
 //-----------------------------------------------------
@@ -36,7 +36,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions)); 
 
-app.use(auth);
+app.use(user);
 app.use(jobs);
 app.use(company);
 

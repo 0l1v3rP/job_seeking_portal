@@ -68,7 +68,7 @@ async function handleUpdateOperation(action, endPoint) {
   await handleDatabaseOperation(async () => {
     const result = await action();
     const successMessage = `Record in ${endPoint} updated successfully`;
-    const failureMessage = `Failed to update record in ${endPoint}`
+    const failureMessage = `No such record found in ${endPoint}`
     handleResult(result, successMessage, failureMessage);
   }, `Error updating database | table: ${endPoint}`);
 }
@@ -77,16 +77,14 @@ async function handleDatabaseOperation(action, message) {
   try {
     return await action();
   } catch {
-    console.error(message);
-    throw new DatabaseErrorException(message, 401)  } 
+    throw new DatabaseErrorException(message, 500)  } 
 }
 
 function handleResult(result, successMessage, failureMessage) {
   if (result.rowCount > 0) {
     console.log(successMessage);
   } else {
-    console.error(failureMessage);
-    throw new UnsuccessfullOperationException(failureMessage);
+    throw new UnsuccessfullOperationException(failureMessage, 404);
   }
 }
 
