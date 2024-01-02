@@ -1,14 +1,13 @@
-// SignInModal.js
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useAuth } from './AuthProvider';
+import {useAuth ,SetSignInState, fetchCompanyStatusState } from './AuthProvider';
 
 const SignInModal = ({ show, handleClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {setSignedIn} = useAuth();
+  const {setAuthState} = useAuth();
 
-
+  
   async function signIn() {
     try {
       const response = await fetch('http://localhost:8000/signin', {
@@ -17,12 +16,16 @@ const SignInModal = ({ show, handleClose }) => {
           'Content-Type' : 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ email: email, password: password })
+        body: JSON.stringify({ 
+          email: email,
+          password: password
+        })
       });
 
       if (response.ok) {
         console.log('User Signed in successfully'); 
-        setSignedIn(true);
+        SetSignInState(setAuthState, true);
+        await fetchCompanyStatusState(setAuthState);
         handleClose();
       } else {
         const errorData = await response.json();
@@ -32,11 +35,6 @@ const SignInModal = ({ show, handleClose }) => {
       console.error('An error occurred during user registration', error);
     }
   }
-
-  const handleSignIn = async () => {
-    console.log('Signing in with email: ', email);
-    await signIn();
-  };
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -70,7 +68,7 @@ const SignInModal = ({ show, handleClose }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSignIn}>
+        <Button variant="primary" onClick={signIn}>
           Sign In
         </Button>
       </Modal.Footer>

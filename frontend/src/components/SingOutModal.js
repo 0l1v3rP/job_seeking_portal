@@ -1,10 +1,10 @@
-
 import React from 'react';
-import { useAuth } from '../components/AuthProvider';
+import {useAuth, SetSignInState, setCompanyStatusState} from '../components/AuthProvider';
 import GenericModal from './GenericModal';
+import { companyStatusEnum } from '../utils/constants/companyStatus';
 
 const SignOutModal = ({ handleClose }) => {
-  const { setSignedIn } = useAuth();
+  const { setAuthState } = useAuth();
   const handleSignOut = async () => {
     const response = await fetch('http://localhost:8000/signout', {
           method: 'GET',
@@ -16,7 +16,8 @@ const SignOutModal = ({ handleClose }) => {
   
         if (response.ok) {
           console.log('User Signed out successfully'); 
-          setSignedIn(false);
+          SetSignInState(setAuthState, false);
+          setCompanyStatusState(setAuthState, companyStatusEnum.NONE);
         } else {
           const errorData = await response.json();
           console.error('User Sign out failed:', errorData);

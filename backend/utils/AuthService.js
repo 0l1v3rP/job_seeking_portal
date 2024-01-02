@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const {InvalidInputException, AuthorizationException} = require('./exceptions'); 
-const {handleResponseSync, payload} = require('./responseHelper');
+const {handleResponseSync, payload, handleResponseAsync} = require('./responseHelper');
+const companyData = require('../dataLayer/companyData');
+const { getUserCompany } = require('../businessLayer/companyBusiness');
 
 async function hashPassword(password) {
         const salt = await bcrypt.genSalt(saltRounds);
@@ -15,7 +17,7 @@ async function compareHashedPswds(enteredPassword, storedHashPassword){
         console.log('Passwords match');
     } else {
         console.log('Passwords don\'t match');
-        throw new InvalidInputException('Wrong password');
+        throw new InvalidInputException('Wrong password', 422);
     }        
 }
 
@@ -41,9 +43,43 @@ function checkSignInStatus(req, res, next) {
         payload({
             isLoggedIn,
             user: isLoggedIn ? req.session.user : null
-        });
+        }, res);
     }, next);
 }
+
+async function getUserCompanysStatus(req, res, next) {
+    await handleResponseAsync( async () => {
+        let result = 0;
+        if (req.session.user.company !== undefined) {
+            const data = isUserAdminForCompany(req.session.user.id); 
+        }
+        payload(result, res);
+    },next);
+}
+
+function withCompany(req, res, next) {
+    handleResponseSync(() => {
+        if (req.session.user.company == undefined) {
+            throw new AuthorizationException('You need to have registered company ', 401);
+        }
+    }, next);
+}
+
+function withoutCompany(req, res, next) {
+    handleResponseSync(() => {
+        if (req.session.user.company !== undefined) {
+            throw new AuthorizationException('You canno\'t have company registered', 401);
+        }
+    }, next);
+}
+
+
+async function isUserAdminForCompany(req, res, next) {
+    await handleResponseAsync( async () => {
+        const result = await getUserCompany.isUserAdminForCompany(req.session.user.id);
+    }, next);
+}
+
 
 
 module.exports = {
@@ -51,5 +87,6 @@ module.exports = {
     compareHashedPswds,
     isSignedIn,
     isNotSignedIn,
-    checkSignInStatus
+    checkSignInStatus,
+    getUserCompanysStatus
 }

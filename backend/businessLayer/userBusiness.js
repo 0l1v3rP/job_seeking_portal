@@ -22,7 +22,7 @@ async function signIn(email, password) {
         const storedHashPassword = userPswd.password;
         await compareHashedPswds(password, storedHashPassword);
     } else {
-        throw new InvalidInputException('Invalid email');
+        throw new InvalidInputException('Invalid email',422);
     }
 }
 
@@ -30,10 +30,15 @@ async function deleteAccount(email) {
     await data.deleteUser(email);
 }
 
+async function getUserId(email) {
+    await data.getUserId(email);
+}
+
 module.exports = {
     registerUser,
     editUser,
     getMyAccount,
     signIn,
-    deleteAccount
+    deleteAccount,
+    getUserId
 }

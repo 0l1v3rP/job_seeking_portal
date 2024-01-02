@@ -14,6 +14,11 @@ async function getUserPswd(email) {
     return await dbHelper.selectRecords(query, [email]);
 }
 
+async function getUserId(email) {
+    const query = `SELECT user_id FROM "${dbHelper.Endpoints.USER}" WHERE email = $1`;
+    return (await dbHelper.selectRecords(query, [email]))[0];
+}
+
 async function editUser(user) {
     const dbUser = user.toDBFormat();
     const keyName = 'email';
@@ -53,6 +58,12 @@ async function registerToCompany(companyId, email) {
     return resultModel;
 }
 
+async function userHasCompany() {
+    const query = `SELECT 1 FROM ${dbHelper.Endpoints.USER} WHERE user_company IS NOT NULL`;
+    return await dbHelper.selectRecords(query, [email]);
+}
+
+
 module.exports = {
     insertUser,
     getUserPswd,
@@ -61,5 +72,7 @@ module.exports = {
     getAccount,
     registerToCompany,
     userExist,
-    getAllUsers
+    getAllUsers,
+    getUserId,
+    userHasCompany,
 }

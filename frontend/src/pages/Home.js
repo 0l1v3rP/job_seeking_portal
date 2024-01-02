@@ -9,16 +9,16 @@ import { useAuth } from '../components/AuthProvider';
 function Home() {
 
   
-  const { isSignedIn } = useAuth();
+  const { authState } = useAuth();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (isSignedIn !== null) {
-      setShow(!isSignedIn);
+    if (authState.isSignedIn !== null) {
+      setShow(!authState.isSignedIn);
     }
-  }, [isSignedIn]);
+  }, [authState.isSignedIn]);
 
-  if (isSignedIn === null) {
+  if (authState.isSignedIn === null) {
     return ;
   }
 

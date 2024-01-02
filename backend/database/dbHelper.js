@@ -25,7 +25,7 @@ async function selectRecords(query, values = []) {
     const result = await client.query(query, values);
     console.log('Select result:', result.rows);
     return result.rows;
-  }, `Error selecting from database`);
+  }, `Error selecting from da tabase`);
 }
 
 async function updateRecord(endPoint, dataObj, keyName, keyValue) {

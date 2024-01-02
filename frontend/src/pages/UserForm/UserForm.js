@@ -8,14 +8,14 @@ import {useNavigate} from 'react-router-dom';
 import { useAuth } from '../../components/AuthProvider';
 
 const UserForm = () => {
-  const { isSignedIn } = useAuth();
+  const { authState } = useAuth();
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     username: '',
-    ...(!isSignedIn && {
+    ...(!authState.isSignedIn && {
       email: '',
       password: '',
     }),
@@ -29,7 +29,7 @@ const UserForm = () => {
     firstName: '',
     lastName: '',
     username: '',
-    ...(!isSignedIn && {
+    ...(!authState.isSignedIn  && {
        email: '',
        password: '',
      }),
@@ -38,23 +38,23 @@ const UserForm = () => {
     zip: '',
   });
 
-  useEffect(() => {
-    if (isSignedIn) {
-      setFormErrors((prevErrors) => {
-        const { email, password, ...rest } = prevErrors;
-        return rest;
-      });
-      setFormData((prevData) => {
-        const { email, password, ...rest } = prevData;
-        return rest;
-      });
-    }
-  }, [isSignedIn]);
+  // useEffect(() => {
+  //   if (authState.isSignedIn ) {
+  //     setFormErrors((prevErrors) => {
+  //       const { email, password, ...rest } = prevErrors;
+  //       return rest;
+  //     });
+  //     setFormData((prevData) => {
+  //       const { email, password, ...rest } = prevData;
+  //       return rest;
+  //     });
+  //   }
+  // }, [authState.isSignedIn ]);
 
   const[formSubmitted, setFormSubmitted] = useState(false);
 
   const validateInput = (name, value) => {
-    if(isSignedIn && (name === 'email' || name === 'password') ) return;
+    if(authState.isSignedIn && (name === 'email' || name === 'password') ) return;
     let error;
     if(name === "country"){
       error = !value ? 'Please select a country from the list' : '';
@@ -108,8 +108,9 @@ const UserForm = () => {
     Object.entries(formData).forEach(i => validateInput(i[0], i[1]));
     setFormSubmitted(true);
   }
+
   useEffect(() => {
-    if(isSignedIn) {
+    if(authState.isSignedIn ) {
         fetch('http://localhost:8000/getmyaccount', {
           credentials: 'include'
         })
@@ -117,8 +118,8 @@ const UserForm = () => {
         .then(userObj => {
           setFormData(prevData => ({
             ...prevData,
-            firstName: userObj.user.firstname || '',
-            lastName: userObj.user.lastname || '',
+            firstName: userObj.user.firstName || '',
+            lastName: userObj.user.lastName || '',
             username: userObj.user.username || '',
             address: userObj.user.address || '',
             country: userObj.user.country || '',
@@ -129,14 +130,14 @@ const UserForm = () => {
           console.error('Error fetching user data:', error);
         });
     }
-  }, [isSignedIn]);
+  }, [authState.isSignedIn ]);
 
   useEffect(() => {
     if (formSubmitted) {
       const hasErrors = Object.values(formErrors).some(error => error !== '');
       if (!hasErrors) {
         console.log('Form submitted successfully!');
-        if (isSignedIn) {
+        if (authState.isSignedIn) {
           updateUser();
         } else{
           registerUser();
@@ -191,13 +192,13 @@ const UserForm = () => {
   };
   
   
-  if (isSignedIn === null) {
+  if (authState.isSignedIn === null) {
     return ;
   }
 
   return (
     <div className='register-form'>
-      <p className='Title'>{isSignedIn ? 'MAKE YOUR ACCOUNT UPDATE' : 'MAKE YOUR REGISTRATION' }</p>
+      <p className='Title'>{authState.isSignedIn  ? 'MAKE YOUR ACCOUNT UPDATE' : 'MAKE YOUR REGISTRATION' }</p>
       <div className="row g-3 register">   
 
         <FormField
@@ -226,7 +227,7 @@ const UserForm = () => {
           error={formErrors.username}
           onChange={(e) => handleInputChange(e)}
         />
-      {!isSignedIn &&
+      {!authState.isSignedIn &&
         <>
           <FormField
             label="Password"
@@ -274,7 +275,7 @@ const UserForm = () => {
 
       </div> 
       <br/>
-      <button className="btn-register" onClick={() => handleSubmit()}>{isSignedIn ? 'Update': 'Register'}</button>
+      <button className="btn-register" onClick={() => handleSubmit()}>{authState.isSignedIn  ? 'Update': 'Register'}</button>
     </div>
   );
 }

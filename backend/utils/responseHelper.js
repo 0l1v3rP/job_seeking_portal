@@ -31,7 +31,7 @@ function handleResponseSync(action, next) {
      }
 }
 
-function payload(payload) {
+function payload(payload, res) {
     res.locals.payload = payload;
 }
 

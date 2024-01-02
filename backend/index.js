@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const {connectToDatabase, disconnectFromDatabase } = require('./database/dbConnection');
 const session = require('express-session');

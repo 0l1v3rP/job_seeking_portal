@@ -8,10 +8,13 @@ async function insertCompany(company) {
     return resultModel
 }
 
-async function companyExist(email) {
-    const query = getUserCompanyQuery('1');
+
+async function isUserAdminForCompany(user_id) {
+    const query =  `SELECT 1 FROM ${dbHelper.Endpoints.COMPANY} 
+    WHERE ${user_id}=super_admin LIMIT 1`
     return await dbHelper.selectRecords(query, [email]);
 }
+
 
 async function getUserCompany(email) {
     const query = getUserCompanyQuery('*');
@@ -27,5 +30,7 @@ function getUserCompanyQuery(select) {
         WHERE ${dbHelper.Endpoints.USER}.email=$1 LIMIT 1`
 }
 module.exports = {
-    insertCompany
+    insertCompany,
+    getUserCompany,
+    isUserAdminForCompany
 }

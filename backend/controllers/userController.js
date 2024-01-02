@@ -6,7 +6,7 @@ async function editUser(req, res, next) {
   await handleResponseAsync(async () => {
     const user = res.locals.user;
     await business.editUser(user);
-    payload({ message: `user edit was successfull` });
+    payload({ message: `user edit was successfull` }, res);
   }, next);
 }
 
@@ -20,9 +20,9 @@ async function registerUser(req, res, next) {
 
 async function getMyAccount(req, res, next) {
   await handleResponseAsync(async () => {
-    const email = res.locals.user.email;
-    const user = (await business.getMyAccount(email));
-    payload({user: user});
+    const email = req.session.user.email;
+    const user = await business.getMyAccount(email);
+    payload({user: user}, res);
   }, next);
 }
 
@@ -31,15 +31,16 @@ async function signIn(req, res, next) {
     const password = res.locals.password;
     const email = res.locals.email;
     await business.signIn(email, password);
-    req.session.user = { email }; //setting session
-    payload({ message: 'User signed in successfully' });
+    const user = await business.getMyAccount(email);
+    req.session.user = { ...user }; //setting session
+    payload({ message: 'User signed in successfully' }, res);
   }, next);
 }
 
 function signOut(req, res, next) {
   handleResponseSync(() => {
     destroySession(req,res)
-    payload({ message: 'User signed out successfully' });
+    payload({ message: 'User signed out successfully' }, res);
   }, next);
 }
 
@@ -47,7 +48,7 @@ async function deleteAccount(req, res, next) {
   await handleResponseAsync(async () => {
     const email = res.locals.email; 
     await business.deleteAccount(email);
-    payload({ message: 'account deleted succesfully' });
+    payload({ message: 'account deleted succesfully' }, res);
   }, next);
 }
 

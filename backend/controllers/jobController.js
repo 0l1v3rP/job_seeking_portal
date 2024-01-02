@@ -4,7 +4,7 @@ const {handleResponseAsync, handleResponseSync, payload} = require('../utils/res
 async function getAllJobs(req, res, next) {
     await handleResponseAsync( async () => {
         const jobs = await business.getAllJobs();
-        payload(jobs);
+        payload(jobs, res);
     }, next);
 }
 

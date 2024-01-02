@@ -8,8 +8,11 @@ class UserDTO {
         if(data.password) {
             this.password = data.password;
         }
-        if(data.company) {
-            this.company = data.company;
+        if(data.id) {
+            this.id = data.id;
+        }
+        if(data.companyId) {
+            this.companyId = data.companyID;
         }
         this.country = data.country;
         this.zip = data.zip;
@@ -26,11 +29,14 @@ class UserDTO {
             zip: this.zip
         };
 
+        if(this.id) {
+            dbFormat.user_id = this.id;
+        }
         if(this.password) {
             dbFormat.password = this.password;
         }
-        if(this.company) {
-            dbFormat.user_company = this.company;
+        if(this.companyId) {
+            dbFormat.user_company = this.companyId;
         }
 
         return dbFormat;
@@ -46,7 +52,8 @@ class UserDTO {
             password: dbData.password,
             country: dbData.country,
             zip: dbData.zip,
-            company: dbData.user_company
+            companyId: dbData.user_company,
+            id: dbData.user_id,
         });
     }
 }
