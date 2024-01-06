@@ -1,15 +1,8 @@
-const CompanyDTO = require("../models/company");
-
-function validateCompany(req, res, next) {  
-    
-}
+const {handleResponseSync} = require('../utils/responseHelper');
 
 function validateCompany(req, res, next) {
     handleResponseSync(() => {
-        const companyData = req.body;
-        // validateCompanyData(companyData);
-        const company = new CompanyDTO(companyData);
-        
+        // const companyData = req.body;     
     }, next);
 }
 

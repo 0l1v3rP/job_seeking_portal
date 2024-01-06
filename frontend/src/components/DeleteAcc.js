@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../components/AuthProvider';
-import GenericModal from './GenericModal';
+import GenericModal from '../modals/GenericModal';
 
 const DeleteModal = ({ handleClose }) => {
     const { setSignedIn } = useAuth();

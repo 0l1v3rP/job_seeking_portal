@@ -33,3 +33,28 @@ hr
 {
   border-top: 5px solid white;
 }
+
+.btn-primary {
+    color:var(--btn-color);
+    background-color: var(--btn-primary-bg-color);
+    border-color: var( --btn-primary-border-color);
+}
+.btn-primary:hover,
+:not(.btn-check) + .btn:active {
+    color: var(--btn-color);
+    background-color: var(--btn--primary-hover-bg-color);
+    border-color: var( --btn--primary-hover-border-color);
+}
+
+.dropdown-item:active {
+    background-color: var(--btn-primary-bg-color);
+    color: var(--btn-color);
+}
+
+:root {
+    --btn-color: black;
+    --btn-primary-bg-color: yellow;
+    --btn-primary-border-color:  black;
+    --btn--primary-hover-bg-color: rgb(221, 221, 18);
+    --btn--primary-hover-border-color: black;
+}

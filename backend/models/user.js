@@ -1,3 +1,5 @@
+const {handleResponseSync} = require('../utils/responseHelper');
+
 class UserDTO {
     constructor(data){
         this.firstName = data.firstName;
@@ -12,7 +14,7 @@ class UserDTO {
             this.id = data.id;
         }
         if(data.companyId) {
-            this.companyId = data.companyID;
+            this.companyId = data.companyId;
         }
         this.country = data.country;
         this.zip = data.zip;
@@ -55,6 +57,16 @@ class UserDTO {
             companyId: dbData.user_company,
             id: dbData.user_id,
         });
+    }
+
+    static createFromClientFormat(req, res,next)  {
+        handleResponseSync(() => {
+            const user = new UserDTO(req.body);
+            if(req.session.user) {
+                user.email = req.session.user.email;
+            }
+            res.locals.user = user;
+        }, next);   
     }
 }
   

@@ -12,7 +12,7 @@ async function insertCompany(company) {
 async function isUserAdminForCompany(user_id) {
     const query =  `SELECT 1 FROM ${dbHelper.Endpoints.COMPANY} 
     WHERE ${user_id}=super_admin LIMIT 1`
-    return await dbHelper.selectRecords(query, [email]);
+    return await dbHelper.selectRecords(query, []);
 }
 
 
@@ -20,6 +20,13 @@ async function getUserCompany(email) {
     const query = getUserCompanyQuery('*');
     const result = await dbHelper.selectRecords(query, [email]);
     const resultModel = CompanyDTO.fromDBFormat(result[0]);
+    return resultModel;
+}
+
+async function insertCompany(company) {
+    const dbCompany = company.toDBFormat();
+    const result = await dbHelper.insertRecord(dbHelper.Endpoints.COMPANY ,dbCompany);
+    const resultModel = CompanyDTO.fromDBFormat(result);
     return resultModel;
 }
 
@@ -32,5 +39,6 @@ function getUserCompanyQuery(select) {
 module.exports = {
     insertCompany,
     getUserCompany,
-    isUserAdminForCompany
+    isUserAdminForCompany,
+    insertCompany
 }

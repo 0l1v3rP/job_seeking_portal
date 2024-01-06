@@ -35,7 +35,7 @@ async function signIn(req, res, next) {
     req.session.user = { ...user }; //setting session
     payload({ message: 'User signed in successfully' }, res);
   }, next);
-}
+} 
 
 function signOut(req, res, next) {
   handleResponseSync(() => {

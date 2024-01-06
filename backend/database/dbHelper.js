@@ -2,12 +2,13 @@ const { client } = require('./dbClient');
 const {UnsuccessfullOperationException, DatabaseErrorException} = require('../utils/exceptions');
 
 async function insertRecord(endPoint, dataObj) {
-  await handleDatabaseOperation(async () => {
+  return await handleDatabaseOperation(async () => {
     const columns = Object.keys(dataObj);
     const values = Object.values(dataObj);
     const query = `INSERT INTO "${endPoint}" (${columns.join(', ')}) VALUES (${values.map((_, i) => `$${1 + i}`).join(', ')}) RETURNING *`;
     const result = await client.query(query, values);
     console.log('Insert result:', result.rows[0]);
+    return result.rows[0];
   }, `Error inserting into database | table: ${endPoint}`);
 } 
 
@@ -44,7 +45,7 @@ async function updateRecord(endPoint, dataObj, keyName, keyValue) {
 async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) {
   return await handleUpdateOperation(async () => {
     const setClause = `${fieldName}=$1`;
-    const whereClause = `${keyName} = $2}`;
+    const whereClause = `${keyName} = $2`;
     const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
     const result = await client.query(updateQuery, [fieldValue, keyValue]);
     console.log('Update result:', result.rows);
@@ -65,7 +66,7 @@ async function deleteRecord(endPoint, keyName, keyValue) {
 //---------------------------HANDLER FUNCTIONS FOR DATABASE OPERATIONS------------------------------- 
 
 async function handleUpdateOperation(action, endPoint) {
-  await handleDatabaseOperation(async () => {
+  return await handleDatabaseOperation(async () => {
     const result = await action();
     const successMessage = `Record in ${endPoint} updated successfully`;
     const failureMessage = `No such record found in ${endPoint}`

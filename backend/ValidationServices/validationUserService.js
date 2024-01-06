@@ -25,26 +25,16 @@ async function validateUserAcc(req, res, next) {
 
 function validateUser(req, res, next) {
     handleResponseSync(() => {
-        const userData = req.body;
-        validateUserData(userData);
-        const user = new User(userData);
-        if(req.session.user) { //if user has session, add an email to user 
-            user.email = req.session.user.email;
+        const user = req.body;        
+        checkForNullOrEmpty(...Object.values(user));
+        if (!isValidEmail(user.email)) {
+            throw new ValidationException('Invalid email format', 403);
         }
-        res.locals.user = user;
+        if(!isValidZip(user.zip)) {
+            throw new ValidationException('Invalid zip format', 403);
+        }
     }, next);
 }
-
-function validateUserData(user){
-    checkForNullOrEmpty(...Object.values(user));
-    if (!isValidEmail(user.email)) {
-        throw new ValidationException('Invalid email format', 403);
-    }
-    if(!isValidZip(user.zip)) {
-        throw new ValidationException('Invalid zip format', 403);
-    }
-}
-
 
 async function checkIfUserAlreadyExist(req,res,next) {
     await handleResponseAsync( async () => {

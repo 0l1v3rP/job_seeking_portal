@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import {useAuth ,SetSignInState, fetchCompanyStatusState } from './AuthProvider';
+import {useAuth ,SetSignInState, fetchCompanyStatusState } from '../components/AuthProvider';
 
 const SignInModal = ({ show, handleClose }) => {
   const [email, setEmail] = useState('');

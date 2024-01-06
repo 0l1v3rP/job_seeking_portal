@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useAuth } from './AuthProvider';
 
 const RegisterCompanyModal = ({ show, handleClose }) => {
   const [companyData, setCompanyData] = useState({
-    title: '',
+    name: '',
     description: '',
     imageFile: null,
   });
@@ -20,15 +19,15 @@ const RegisterCompanyModal = ({ show, handleClose }) => {
   const handleRegister = async () => {
     try {
       const formData = new FormData();
-      formData.append('title', companyData.title);
+      formData.append('name', companyData.name);
       formData.append('description', companyData.description);
-      formData.append('imageFile', companyData.imageFile);
+      formData.append('imageFile', companyData.imageFile);              
 
-      const response = await fetch('http://localhost:8000/register-company', {
+      const response = await fetch('http://localhost:8000/registerCompany', {
         method: 'POST',
-        headers: {
-            'Content-Type' : 'application/json',
-          },
+        // headers: {
+        //     'Content-Type' : 'multipart/form-data',
+        //   },
         credentials: 'include',
         body: formData,
       });
@@ -56,9 +55,9 @@ const RegisterCompanyModal = ({ show, handleClose }) => {
             <Form.Label>Title</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter company title"
-              name="title"
-              value={companyData.title}
+              placeholder="Enter company name"
+              name="name"
+              value={companyData.name}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -81,6 +80,7 @@ const RegisterCompanyModal = ({ show, handleClose }) => {
               type="file"
               accept="image/*"
               name="imageFile"
+            //   value={companyData.imageFile}
               onChange={handleInputChange}
             />
           </Form.Group>

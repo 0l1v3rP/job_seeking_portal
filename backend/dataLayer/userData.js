@@ -50,16 +50,14 @@ async function getAllUsers() {
     return resultModel;
 }
 
-async function registerToCompany(companyId, email) {
+async function registerCompanytoUser(userId, companyId) {
     const fieldName = 'user_company';
-    const keyName = 'email';
-    await dbHelper.updateField(dbHelper.Endpoints.USER, fieldName, companyId, keyName, email); 
-    const resultModel = UserDTO.fromDBFormat(result);
-    return resultModel;
+    const keyName = 'user_id';
+    await dbHelper.updateField(dbHelper.Endpoints.USER, fieldName, companyId, keyName, userId); 
 }
 
 async function userHasCompany() {
-    const query = `SELECT 1 FROM ${dbHelper.Endpoints.USER} WHERE user_company IS NOT NULL`;
+    const query = `SELECT 1 FROM "${dbHelper.Endpoints.USER}" WHERE user_company IS NOT NULL`;
     return await dbHelper.selectRecords(query, [email]);
 }
 
@@ -70,7 +68,7 @@ module.exports = {
     editUser,
     deleteUser,
     getAccount,
-    registerToCompany,
+    registerCompanytoUser,
     userExist,
     getAllUsers,
     getUserId,

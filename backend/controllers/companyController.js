@@ -1,28 +1,28 @@
 const business = require('../businessLayer/companyBusiness');
 const {handleResponseAsync, handleResponseSync, payload} = require('../utils/responseHelper');
-const { registerUser } = require('./userController');
-const CompanyDTO = require('../models/company');
-//TODO: get company if user has company registered
-async function getCompany(res, req, next) {
+
+async function getCompany(req, res, next) {
     await handleResponseAsync( async () => {
         const company = business.getUserCompany(req.session.user.email);
         payload({company : company}, res);
     }, next);
 }
 
-async function registerCompany(res, req, next) {
+async function registerCompany(req, res, next) {
     await handleResponseAsync( async () => {
-
+        const company = await business.registerCompany( res.locals.company);
+        req.session.user.companyId = company.id;
+        payload({company : company}, res);
     }, next);
 }
 
-async function deleteCompany(res, req, next) {
+async function deleteCompany(req, res, next) {
     await handleResponseAsync( async () => {
         
     }, next);
 }
 
-async function editCompany(res, req, next) {
+async function editCompany(req, res, next) {
     await handleResponseAsync( async () => {
 
     }, next);

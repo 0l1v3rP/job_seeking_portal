@@ -3,7 +3,6 @@ const saltRounds = 10;
 const {InvalidInputException, AuthorizationException} = require('./exceptions'); 
 const {handleResponseSync, payload, handleResponseAsync} = require('./responseHelper');
 const companyData = require('../dataLayer/companyData');
-const { getUserCompany } = require('../businessLayer/companyBusiness');
 
 async function hashPassword(password) {
         const salt = await bcrypt.genSalt(saltRounds);
@@ -23,7 +22,7 @@ async function compareHashedPswds(enteredPassword, storedHashPassword){
 
 function isSignedIn(req, res, next) {
     handleResponseSync(() => {
-        if (req.session.user === undefined) {
+        if (typeof req.session.user === 'undefined') {
             throw new AuthorizationException('You need to be signed in', 401);
         }
     }, next);
@@ -31,7 +30,7 @@ function isSignedIn(req, res, next) {
 
 function isNotSignedIn(req, res, next) {
     handleResponseSync(() => {
-        if (req.session.user !== undefined) {
+        if (typeof req.session.user !== 'undefined') {
             throw new AuthorizationException('You cannot be signed in', 401);
         }
     }, next);
@@ -39,7 +38,7 @@ function isNotSignedIn(req, res, next) {
 
 function checkSignInStatus(req, res, next) {
     handleResponseSync(() => {
-        const isLoggedIn = req.session.user !== undefined;
+        const isLoggedIn = typeof req.session.user !== 'undefined';
         payload({
             isLoggedIn,
             user: isLoggedIn ? req.session.user : null
@@ -47,11 +46,16 @@ function checkSignInStatus(req, res, next) {
     }, next);
 }
 
+async function isUserAdminForCompany(id) {
+    const result = await companyData.isUserAdminForCompany(id);
+    return Object.values(result[0])[0] === 1;
+}
+
 async function getUserCompanysStatus(req, res, next) {
     await handleResponseAsync( async () => {
         let result = 0;
-        if (req.session.user.company !== undefined) {
-            const data = isUserAdminForCompany(req.session.user.id); 
+        if (typeof  req.session.user.companyId !== 'undefined') {
+            result = isUserAdminForCompany(req.session.user.id) ? 2 : 1; 
         }
         payload(result, res);
     },next);
@@ -59,7 +63,7 @@ async function getUserCompanysStatus(req, res, next) {
 
 function withCompany(req, res, next) {
     handleResponseSync(() => {
-        if (req.session.user.company == undefined) {
+        if (typeof req.session.user.companyId === 'undefined') {
             throw new AuthorizationException('You need to have registered company ', 401);
         }
     }, next);
@@ -67,20 +71,11 @@ function withCompany(req, res, next) {
 
 function withoutCompany(req, res, next) {
     handleResponseSync(() => {
-        if (req.session.user.company !== undefined) {
+        if (req.session.user.companyId !== 'undefined') {
             throw new AuthorizationException('You canno\'t have company registered', 401);
         }
     }, next);
 }
-
-
-async function isUserAdminForCompany(req, res, next) {
-    await handleResponseAsync( async () => {
-        const result = await getUserCompany.isUserAdminForCompany(req.session.user.id);
-    }, next);
-}
-
-
 
 module.exports = {
     hashPassword,
