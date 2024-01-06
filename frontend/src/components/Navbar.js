@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './Navbar.css';
-import { useAuth } from './AuthProvider';
+import { useAuth, setCompanyStatusState, SetSignInState } from './AuthProvider';
 import SignOutModal from '../modals/SingOutModal';
-import DeleteModal from './DeleteAcc';
+import DeleteAccountModal from '../modals/DeleteAcountModal';
 import { companyStatusEnum } from '../utils/constants/companyStatus';
 import RegisterCompanyModal from '../modals/registerCompanyModal';
+import DeleteModalGeneric from '../modals/DeleteModalGeneric';
 
 function Navbar() {
-  const { authState } = useAuth();
+  const { authState, setAuthState } = useAuth();
 
   const [showSignOut, setShowSignOut] = useState(false);
   const openShowSignOut = () => setShowSignOut(true);
@@ -20,6 +21,10 @@ function Navbar() {
   const [showRegisterCompany, setRegisterCompany] = useState(false);
   const openShowRegisterCompany = () => setRegisterCompany(true);
   const closeShowRegisterCompany = () => setRegisterCompany(false);
+
+  const [showDeleteCompany, setDeleteCompany] = useState(false);
+  const openShowDeleteCompany = () => setDeleteCompany(true);
+  const closeShowDeleteCompany = () => setDeleteCompany(false);
 
 
   useEffect(() => {
@@ -42,10 +47,7 @@ function Navbar() {
         <div className="navbar-collapse collapse" id="navbarToggler">
           <ul className="navbar-nav mx-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="/jobs">Jobs</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/offer-a-job">Offer A Job</a>
+              <a className="nav-link" href="/AvailableJobs">Jobs</a>
             </li>
             {authState.isSignedIn !== null && (
               authState.isSignedIn ? (
@@ -69,28 +71,27 @@ function Navbar() {
                     {authState.companyStatus === companyStatusEnum.NONE ? (
                         <a className="dropdown-item" onClick={openShowRegisterCompany}>Register Company</a>
                       ) : (
-                        <></> 
-                      )}
-                    {authState.companyStatus !== companyStatusEnum.NONE && 
                         <>
-                        </> // menu of job offers: 
+                        {/* <a className="dropdown-item" onClick={openShowSignOut}>Edit Company</a> */}
+                        <a className="dropdown-item" onClick={openShowDeleteCompany}>Delete Company</a>
+                        {/* <a className="dropdown-item" href="/Userform">Edit Account</a> */}
+                          {/* Company business */}
+                        </>
+                      )}
+                    {/* {authState.companyStatus !== companyStatusEnum.NONE &&
+                        <>
+                        </> // menu of job offers:
                               //  view job offers
                               // create job offer
-                              //RENDER THIS MENU NEXT TO COMPANY MENU 
-                    }  
+                              //RENDER THIS MENU NEXT TO COMPANY MENU
+                    } */}
                   </div>
                 </li>
-                 { authState.companyStatus !== companyStatusEnum.NONE && (
-                  <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" id="companyDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Job Offers
-                  </a>
-                  <div className="dropdown-menu" aria-labelledby="companyDropdown">
-                  <a className="dropdown-item" onClick={viewJobOffers}>Sign Out</a>
-
-                  </div>
+                 {/* { authState.companyStatus !== companyStatusEnum.NONE && ( */}
+                 <li className="nav-item ">
+                  <a className="nav-link" href="/JobOffers">Jobs</a>
                 </li>
-                )}
+                {/* )} */}
               </>
               ) : (
                 <li className="nav-item">
@@ -102,8 +103,9 @@ function Navbar() {
         </div>
       </nav>
       {showSignOut && <SignOutModal handleClose={closeShowSignOut} />}
-      {showDeleteAcc && <DeleteModal handleClose={closeShowDeleteAcc} />}
+      {showDeleteAcc && <DeleteModalGeneric handleClose={closeShowDeleteAcc} endpoint={'deleteaccount'} type={'Account'} action={SetSignInState(setAuthState, false)} />};
       {showRegisterCompany && <RegisterCompanyModal show={true} handleClose={closeShowRegisterCompany} />}
+      {showDeleteCompany && <DeleteModalGeneric  handleClose={closeShowDeleteCompany} endpoint={'deletecompany'} type={'Company'} action={setCompanyStatusState(setAuthState, companyStatusEnum.NONE)} />};
     </>
   );
 }

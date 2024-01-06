@@ -3,8 +3,6 @@ import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../components/AuthProvider';
 
 const GenericModal = ({ handleClose, title, actionText, actionFunction }) => {
-  const { setSignedIn } = useAuth();
-
   const handleAction = async () => {
     try {
       await actionFunction();

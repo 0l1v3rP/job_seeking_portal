@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom';
 import { useAuth } from '../../components/AuthProvider';
 
 const UserForm = () => {
-  const { authState } = useAuth();
+  const { authState } = useAuth();  
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

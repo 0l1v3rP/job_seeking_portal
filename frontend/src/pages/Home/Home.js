@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Carousel from '../components/Carousel';
-import SearchBar from '../components/SearchBar';
-import '../App.css';
-import BestEmployeers from '../components/BestEmployeers';
-import SignInModal from '../modals/SignInModal';
-import { useAuth } from '../components/AuthProvider';
+import Carousel from '../../components/Carousel';
+import SearchBar from '../../components/SearchBar';
+import BestEmployeers from '../../components/BestEmployeers';
+import SignInModal from '../../modals/SignInModal';
+import { useAuth } from '../../components/AuthProvider';
 
 function Home() {
 

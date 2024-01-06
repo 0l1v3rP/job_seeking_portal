@@ -1,13 +1,13 @@
 import React from 'react';
-import SearchBar from '../components/SearchBar';
-import JobOffer from '../components/JobOffer';
-import Dropdown from '../components/Dropdown';
-import './Jobs.css';
-import { useAuth } from '../components/AuthProvider';
+import SearchBar from '../../components/SearchBar';
+import JobOfferContainer from '../../components/JobOfferContainer';
+import Dropdown from '../../components/Dropdown';
+import './AvailableJobs.css';
+import { useAuth } from '../../components/AuthProvider';
 import { useEffect, useState } from 'react';
 
 
-function Jobs() {
+function AvailableJobs() {
   const { isSignedIn } = useAuth();
   const [jobsData, setJobsData] = useState({
     title: '',
@@ -57,4 +57,4 @@ function Jobs() {
   )
 }
 
-export default Jobs
+export default AvailableJobs
