@@ -3,7 +3,7 @@ const {handleResponseAsync, handleResponseSync, payload} = require('../utils/res
 
 async function getCompany(req, res, next) {
     await handleResponseAsync( async () => {
-        const company = business.getUserCompany(req.session.user.email);
+        const company =await business.getUserCompany(req.session.user.email);
         payload({company : company}, res);
     }, next);
 }

@@ -1,5 +1,9 @@
 .App{
-    background-color:rgb(80, 122, 129);
+    background-color:var( --app-bg-color);
+}
+
+body, html {
+    background-color:var( --app-bg-color);
 }
 
 p {
@@ -57,4 +61,5 @@ hr
     --btn-primary-border-color:  black;
     --btn--primary-hover-bg-color: rgb(221, 221, 18);
     --btn--primary-hover-border-color: black;
+    --app-bg-color: rgb(80, 122, 129);
 }

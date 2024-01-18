@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './Navbar.css';
 import { useAuth, setCompanyStatusState, SetSignInState } from './AuthProvider';
 import SignOutModal from '../modals/SingOutModal';
-import DeleteAccountModal from '../modals/DeleteAcountModal';
 import { companyStatusEnum } from '../utils/constants/companyStatus';
 import RegisterCompanyModal from '../modals/registerCompanyModal';
 import DeleteModalGeneric from '../modals/DeleteModalGeneric';
@@ -47,7 +46,7 @@ function Navbar() {
         <div className="navbar-collapse collapse" id="navbarToggler">
           <ul className="navbar-nav mx-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="/AvailableJobs">Jobs</a>
+              <a className="nav-link" href="/AvailableJobs">Available Jobs</a>
             </li>
             {authState.isSignedIn !== null && (
               authState.isSignedIn ? (
@@ -103,9 +102,9 @@ function Navbar() {
         </div>
       </nav>
       {showSignOut && <SignOutModal handleClose={closeShowSignOut} />}
-      {showDeleteAcc && <DeleteModalGeneric handleClose={closeShowDeleteAcc} endpoint={'deleteaccount'} type={'Account'} action={SetSignInState(setAuthState, false)} />};
+      {showDeleteAcc && <DeleteModalGeneric handleClose={closeShowDeleteAcc} endpoint={'deleteaccount'} type={'Account'} action={() => {SetSignInState(setAuthState, false)}} />}
       {showRegisterCompany && <RegisterCompanyModal show={true} handleClose={closeShowRegisterCompany} />}
-      {showDeleteCompany && <DeleteModalGeneric  handleClose={closeShowDeleteCompany} endpoint={'deletecompany'} type={'Company'} action={setCompanyStatusState(setAuthState, companyStatusEnum.NONE)} />};
+      {showDeleteCompany && <DeleteModalGeneric  handleClose={closeShowDeleteCompany} endpoint={'deletecompany'} type={'Company'} action={() => {setCompanyStatusState(setAuthState, companyStatusEnum.NONE)}} />}
     </>
   );
 }

@@ -3,28 +3,26 @@ import JobOfferContainer from '../../components/JobOfferContainer';
 import './JobOffers.css';
 import { useAuth } from '../../components/AuthProvider';
 import { useEffect, useState } from 'react';
-
+import ControlTab from './ControlTab';
 
 function JobOffers() {
     const { authState } = useAuth();
-    const [jobsData, setJobsData] = useState({
-    title: '',
-    companyName: '',
-    location: '',
-    arrangement: '',
-    hourlyPay: '',
-    employement: '',
-    description: ''
-  });
+    
 
+  useEffect(() => {
+    if (authState.isSignedIn !== null) {
+      
+    }
+  }, [authState.isSignedIn]);
 
-
-  if (authState.isSignedIn === null || authState.companyStatus ) {
+  if (authState.isSignedIn === null || authState.companyStatus === null ) {
     return ;
   }
   
   return (
     <>
+    <br/>
+        <ControlTab companyStatus={authState.companyStatus}/>
     </>
   )
 }

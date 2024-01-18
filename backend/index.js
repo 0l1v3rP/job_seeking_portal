@@ -12,6 +12,7 @@ const {handleResponseError, handleResponseSuccess} = require('./utils/responseHe
 const user = require('./routers/userRouter');
 const jobs = require('./routers/jobsRouter');
 const company = require('./routers/companyRouter');
+const options = require('./routers/optionsRouter');
 //-----------------------------------------------------
 
 const sessionSecret = process.env.YOUR_SESSION_SECRET || 'fallback-secret';
@@ -38,8 +39,9 @@ const corsOptions = {
 app.use(cors(corsOptions)); 
 
 app.use(user);
-app.use(jobs);
+app.use('/Jobs',jobs);
 app.use(company);
+app.use(options);
 
 app.use(handleResponseSuccess);
 app.use(handleResponseError);

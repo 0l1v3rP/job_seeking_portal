@@ -94,7 +94,9 @@ function handleResult(result, successMessage, failureMessage) {
 const Endpoints = {
   USER: 'user',
   JOB: 'job',
-  COMPANY: 'company'
+  COMPANY: 'company',
+  ARRANGEMENTS: 'work_arrangement',
+  EMPLOYEMENT: 'employement_type'
 };
 
 module.exports = {

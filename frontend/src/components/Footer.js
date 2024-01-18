@@ -4,7 +4,7 @@ function Footer() {
   const footerItems = ['Home', 'Features', 'Pricing', 'FAQs', 'About'];
 
   return (
-    <footer className="py-3 my-4 bg-dark">
+    <footer className="py-3 my-4 bg-dark footer" >
       <ul className="nav justify-content-center border-bottom pb-3 mb-3">
         {footerItems.map((item, index) => (
           <li key={index} className="nav-item">

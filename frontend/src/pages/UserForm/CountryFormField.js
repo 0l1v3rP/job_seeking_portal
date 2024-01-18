@@ -13,7 +13,6 @@ export default function CountryFormField({value, error, onChange})  {
           console.error('Error fetching countries:', e);
         }   
       };
-  
       fetchCountries();
     }, []); 
   return (
