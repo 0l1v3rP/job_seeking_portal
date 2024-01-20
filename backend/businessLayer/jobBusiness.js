@@ -1,7 +1,7 @@
 const data = require('../dataLayer/jobsData');
 
-async function getAllJobs() {
-    return await data.getAllJobs();
+async function getAvailableJobs(userId, companyId) {
+    return await data.getAvailableJobs(userId, companyId);
 }
 
 async function create(job) {
@@ -9,6 +9,6 @@ async function create(job) {
 }
 
 module.exports = {
-    getAllJobs,
+    getAvailableJobs,
     create
 }

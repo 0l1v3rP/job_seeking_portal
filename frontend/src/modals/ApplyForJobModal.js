@@ -1,8 +1,9 @@
 import {React,  useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const ApplyForJobModal = ({ handleClose, id}) => {
+const ApplyForJobModal = ({ handleClose, id, refreshFunction}) => {
   const [resume, setResume] = useState();
+  const [show, setShow] = useState(true);
 
   const handleAction = async () => {
     await fetch(`http://localhost:8000/Application/apply`, {
@@ -12,11 +13,12 @@ const ApplyForJobModal = ({ handleClose, id}) => {
       },
       credentials: 'include',
       body: JSON.stringify({resume, jobId:id}),
-    });
+    }).then(setShow(false))
+    .then(refreshFunction());
   };
 
   return (
-    <Modal show={true} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Apply for Job</Modal.Title>
       </Modal.Header>

@@ -59,7 +59,7 @@ if (authState.isSignedIn === null) {
             </div>
           </div>
       </div>
-      {showApplyForJob && <ApplyForJobModal handleClose={closeShowApplyForJob} id={jobId} />}
+      {showApplyForJob && <ApplyForJobModal handleClose={closeShowApplyForJob} id={jobId} refreshFunction={fetchData}/>}
     </>
   )
 }

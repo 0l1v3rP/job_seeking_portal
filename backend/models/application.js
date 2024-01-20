@@ -14,6 +14,7 @@ class ApplicationDTO {
             job_id : this.jobId,
             user_id: this.userId,
             resume: this.resume,
+            status: this.status
         } 
     }
 

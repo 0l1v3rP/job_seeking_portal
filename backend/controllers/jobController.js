@@ -1,9 +1,11 @@
 const business = require('../businessLayer/jobBusiness');
 const {handleResponseAsync, handleResponseSync, payload} = require('../utils/responseHelper');
 
-async function getAllJobs(req, res, next) {
+async function getAvailableJobs(req, res, next) {
     await handleResponseAsync( async () => {
-        const jobs = await business.getAllJobs();
+        const userId = req.session.user.id;
+        const companyId = req.session.user.companyId;
+        const jobs = await business.getAvailableJobs(userId, companyId);
         payload(jobs, res);
     }, next);
 }
@@ -17,6 +19,6 @@ async function create(req,res,next) {
 }
 
 module.exports = {
-    getAllJobs,
+    getAvailableJobs,
     create
 }
