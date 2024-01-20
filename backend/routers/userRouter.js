@@ -4,11 +4,11 @@ const {isSignedIn, isNotSignedIn, checkSignInStatus} = require('../utils/authSer
 const {validateUser, validateUserAcc, checkIfUserAlreadyExist} = require('../ValidationServices/validationUserService');
 const { destroySession, saveSessionMail } = require('../utils/sessionHelper');
 const app = Router(); 
-const user = require('../models/user')
+const UserDTO = require('../models/user')
   
-app.post('/register', isNotSignedIn, validateUser, checkIfUserAlreadyExist,  user.createFromClientFormat, controller.registerUser); 
+app.post('/register', isNotSignedIn, validateUser, checkIfUserAlreadyExist,  UserDTO.createFromClientFormat, controller.registerUser); 
 app.post('/signin', isNotSignedIn, validateUserAcc, controller.signIn);
-app.put('/editaccount', isSignedIn, validateUser, user.createFromClientFormat, controller.editUser);
+app.put('/editaccount', isSignedIn, validateUser, UserDTO.createFromClientFormat, controller.editUser);
 app.get('/signout', isSignedIn, controller.signOut);
 app.get('/checksigninstatus', checkSignInStatus);
 app.get('/getmyaccount', isSignedIn, controller.getMyAccount);

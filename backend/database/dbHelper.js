@@ -96,7 +96,8 @@ const Endpoints = {
   JOB: 'job',
   COMPANY: 'company',
   ARRANGEMENTS: 'work_arrangement',
-  EMPLOYEMENT: 'employement_type'
+  EMPLOYEMENT: 'employement_type',
+  APPLICATION: 'application'
 };
 
 module.exports = {

@@ -2,16 +2,16 @@ import {React,  useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const ApplyForJobModal = ({ handleClose, id}) => {
-  const [resume] = useState();
+  const [resume, setResume] = useState();
 
   const handleAction = async () => {
-    await fetch(`http://localhost:8000/application/apply`, {
+    await fetch(`http://localhost:8000/Application/apply`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify(resume, id),
+      body: JSON.stringify({resume, jobId:id}),
     });
   };
 
@@ -29,6 +29,7 @@ const ApplyForJobModal = ({ handleClose, id}) => {
             placeholder="Write a reson why You applied for this job"
             name=""
             value={resume}
+            onChange={(e) => setResume(e.target.value)}
           />
         </Form.Group>
       </Modal.Body>

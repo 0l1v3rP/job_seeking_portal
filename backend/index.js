@@ -13,6 +13,7 @@ const user = require('./routers/userRouter');
 const jobs = require('./routers/jobsRouter');
 const company = require('./routers/companyRouter');
 const options = require('./routers/optionsRouter');
+const application = require('./routers/applicationRouter');
 //-----------------------------------------------------
 
 const sessionSecret = process.env.YOUR_SESSION_SECRET || 'fallback-secret';
@@ -40,6 +41,7 @@ app.use(cors(corsOptions));
 
 app.use(user);
 app.use('/Jobs',jobs);
+app.use('/Application',application);
 app.use(company);
 app.use(options);
 

@@ -71,11 +71,20 @@ function withCompany(req, res, next) {
 
 function withoutCompany(req, res, next) {
     handleResponseSync(() => {
-        if (req.session.user.companyId !== 'undefined') {
+        if (typeof req.session.user.companyId !== 'undefined') {
             throw new AuthorizationException('You canno\'t have company registered', 401);
         }
     }, next);
 }
+
+function notTheSameCompany(req, res, next) {
+    handleResponseSync(() => {
+        if (req.session.user.companyId !== req.body.id) {
+            throw new AuthorizationException('You canno\'t apply for a company that you work in', 401);
+        }
+    }, next);
+}
+
 
 module.exports = {
     hashPassword,
@@ -84,5 +93,7 @@ module.exports = {
     isNotSignedIn,
     checkSignInStatus,
     getUserCompanysStatus,
-    withCompany
+    withCompany,
+    withoutCompany,
+    notTheSameCompany
 }
