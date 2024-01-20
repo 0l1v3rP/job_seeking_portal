@@ -83,5 +83,6 @@ module.exports = {
     isSignedIn,
     isNotSignedIn,
     checkSignInStatus,
-    getUserCompanysStatus
+    getUserCompanysStatus,
+    withCompany
 }

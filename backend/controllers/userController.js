@@ -14,7 +14,7 @@ async function registerUser(req, res, next) {
   await handleResponseAsync(async () => {
     const user = res.locals.user;
     await business.registerUser(user);
-    payload({ message: `user registration was successfull` });
+    payload({ message: `user registration was successfull` },res);
   }, next);
 }
 

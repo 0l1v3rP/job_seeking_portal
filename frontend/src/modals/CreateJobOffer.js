@@ -47,7 +47,7 @@ const CreateJobOffer = ({ handleClose }) => {
 
   const handleCreate = async () => {
     await fetch(`http://localhost:8000/Jobs/create`, {
-      method: method,
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -108,6 +108,16 @@ const CreateJobOffer = ({ handleClose }) => {
           />
         </Form.Group>
 
+        <Form.Group controlId="formBasicLocation">
+            <Form.Label>Location</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter Location"
+              name="location"
+              value={jobsData.location}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
 
           <Form.Group controlId="formBasicDescription">
             <Form.Label>Description</Form.Label>

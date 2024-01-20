@@ -8,6 +8,15 @@ async function getAllJobs(req, res, next) {
     }, next);
 }
 
+async function create(req,res,next) {
+    await handleResponseAsync( async () => {
+        const job = res.locals.job;
+        await business.create(job);
+        payload({message: 'Job offer created successfully'}, res)
+    }, next);
+}
+
 module.exports = {
     getAllJobs,
+    create
 }

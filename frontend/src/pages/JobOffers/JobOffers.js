@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import JobOfferContainer from '../../components/JobOfferContainer';
 import './JobOffers.css';
 import { useAuth } from '../../components/AuthProvider';
