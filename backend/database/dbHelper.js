@@ -12,9 +12,9 @@ async function insertRecord(endPoint, dataObj) {
   }, `Error inserting into database | table: ${endPoint}`);
 } 
 
-async function selectAllRecords(endPoint) {
+async function selectAllRecords(endPoint, joinCondition = '') {
   return await handleDatabaseOperation(async () => {
-    const query = `SELECT * FROM "${endPoint}"`;
+    const query = `SELECT * FROM "${endPoint}" ${joinCondition}`;
     const result = await client.query(query);
     console.log('Select all result:', result.rows);
     return result.rows;

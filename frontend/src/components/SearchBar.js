@@ -19,7 +19,7 @@ function SearchBar() {
             <input type="text" id={input.id} className="form-control search" placeholder={input.placeholder} />
           </div>
         ))}
-        <div className="col-sm-1 mt-auto">
+        <div className="col-sm-2 col-md-auto mt-auto">
           <button className="btn btn-search">Search</button>
         </div>
       </div>

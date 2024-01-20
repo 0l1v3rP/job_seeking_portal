@@ -23,14 +23,18 @@ class CompanyDTO {
     }
 
     static fromDBFormat(dbData) {
+        let imgFile = '';
+        if(dbData.img_logo_path) {
+            imgFile = fs.readFileSync(PATHS.imgPath + `/${dbData.img_logo_path}`)
+        }
         return new CompanyDTO({
             name: dbData.company_name,
             admin: dbData.super_admin,
             logoPath: dbData.img_logo_path,
             description: dbData.description,
-            file: fs.readFileSync(PATHS.imgPath + `/${dbData.img_logo_path}`),
-            id: dbData.company_id
-        })
+            file: imgFile,
+            id: dbData.company_id 
+        })  
     }
 
     static createFromClientFormat(req, res,next)  {

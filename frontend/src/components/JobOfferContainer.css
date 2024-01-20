@@ -1,7 +1,7 @@
 .container
 {
     width: 600px;
-    height: 150px;
+    height: 200px;
     background: white;
     border: 1px solid black;
     margin-left: 0;
@@ -12,22 +12,28 @@
 }
 
 .imgJobOffer{
-     width: 150px;
-     height: 150px;
+     width: 200px;
+     height: 198px;
 }
 
 .textContainer p{
 color:black;
+margin-bottom: 0px;
 }
 
+.btnPair {
+    margin-top: 10px;
+    display: flex;
+    gap: 20px; /* Adjust as needed */
+  }
 
 .textContainer{
     float: left;
-    width: 75%;
-    overflow-wrap: break-word;
+    width: 65%;
+    overflow-wrap: break-word;  
     overflow: hidden;
     color: black;
-    height: 150px;
+    height: 200px;
 }
 .imgContainer{
     float: left;

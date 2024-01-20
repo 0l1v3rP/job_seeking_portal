@@ -1,6 +1,8 @@
 .dropDown{
  margin-bottom: 10px;
  width: 200px;
+ max-width: 200px;
+
 }
 
 .dropDownContainer{
@@ -10,5 +12,6 @@
     margin-left: auto;
     margin-right: auto;
     width: 200px;
+    max-width: 200px;
 
 }

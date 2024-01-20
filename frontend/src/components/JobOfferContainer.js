@@ -1,19 +1,30 @@
-import React from 'react'
-import './JobOfferContainer.css'
-function JobOfferContainer({title, location, typeOfWork, sum, companyName,image}) {
+import React from 'react';
+import './JobOfferContainer.css';
+import { formatImgFromBuffer } from '../utils/imgHelper';
+
+function JobOfferContainer({ job, action, setProp, actionName }) {
+  setProp(job);
+  const img = formatImgFromBuffer(job.company.file)
   return (
-    <div className="container">
-        <div className='textContainer'> 
-          <h3 className='h3color'>{title}</h3>
-          <p>{companyName}</p>
-          <p>{location} ({typeOfWork})</p>
-          <p>{sum}</p>
+    <>
+      <div className="container">
+        <div className='textContainer'>
+          <h3 className='h3color'>{job.title}</h3>
+          <p>company: {job.company.name}</p>
+          <p>location: {job.jobLocation} ({job.employementTypes})</p>
+          <p>arrangement: {job.arrangements}</p>
+          <p>pay: {job.hourlyPay}/h $</p>
+          <div className='btnPair' >
+            <button className="btn btn-secondary" >Details</button>
+            {typeof action !== 'undefined' && <button className="btn btn-primary" onClick={action}>{actionName}</button>}
+          </div>
         </div>
-        <div className='imgContainer' >
-          <img className='imgJobOffer' src={image} alt='...'></img>
+        <div className='imgContainer'>
+          <img className='imgJobOffer' src={img} alt='...'></img>
         </div>
-    </div>
-  )
+      </div> 
+    </>
+  );
 }
 
 export default JobOfferContainer

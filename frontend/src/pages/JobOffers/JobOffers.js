@@ -23,6 +23,7 @@ function JobOffers() {
     <>
     <br/>
         <ControlTab companyStatus={authState.companyStatus}/>
+        
     </>
   )
 }

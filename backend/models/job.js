@@ -1,4 +1,6 @@
 const {handleResponseSync} = require('../utils/responseHelper');
+const CompanyDTO = require('./company');
+
 
 class JobDTO {
     constructor(data){
@@ -8,8 +10,10 @@ class JobDTO {
         this.jobLocation = data.jobLocation,
         this.employer = data.employer,
         this.arrangements = data.arrangements,
-        this.employementTypes = data.employementTypes
+        this.employementTypes = data.employementTypes,
+        this.company = data.company,
         this.datePosted = data.datePosted,
+        this.jobId = data.id
 
     }
 
@@ -35,8 +39,8 @@ class JobDTO {
             arrangements: dbData.arrangements,
             employementTypes: dbData.employement_types,
             datePosted: dbData.dateposted,
-            //imgUrl
-            //companyName
+            company: CompanyDTO.fromDBFormat(dbData),
+            id: dbData.job_id
         });
     }
 

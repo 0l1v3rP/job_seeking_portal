@@ -5,55 +5,62 @@ import Dropdown from '../../components/Dropdown';
 import './AvailableJobs.css';
 import { useAuth } from '../../components/AuthProvider';
 import { useEffect, useState } from 'react';
-
+import { formatImgFromBuffer } from '../../utils/imgHelper';
+import ApplyForJobModal from '../../modals/ApplyForJobModal';
 
 function AvailableJobs() {
-  const { isSignedIn } = useAuth();
-  const [jobsData, setJobsData] = useState({
-    title: '',
-    companyName: '',
-    location: '',
-    arrangement: '',
-    hourlyPay: '',
-    employement: '',
-    description: ''
-  });
+  const { authState } = useAuth();
+  const [jobsData, setJobsData] = useState();
 
-  useEffect(() => {
-    fetch('http://localhost:8000/getJobs', {
-      credentials: 'include'
-    })
-  },[])
+  const[jobId, setJobId] = useState();
+    const setJobIdProp = (job) => {setJobId(job.jobId)};
 
-  if (isSignedIn === null) {
-    return ;
-  }
+  const [showApplyForJob, setApplyForJob] = useState(false);
+  const openShowDApplyForJob = () => setApplyForJob(true);
+  const closeShowApplyForJob = () => setApplyForJob(false);
+
+
+
+  const fetchData = async () => {
+      await fetch('http://localhost:8000/Jobs/getJobs', {
+        credentials: 'include'
+      }).then(response => response.json())
+      .then(jobs => setJobsData(jobs))
+      .catch(error => console.error('Error fetching jobs:', error));
+  };
+
+useEffect(()=> {
+    if(typeof jobsData === 'undefined' && authState.isSignedIn !== null) {
+      fetchData();
+   }
+}, [])
+
+if (authState.isSignedIn === null) {
+  return;
+}
+
   
   return (
-    <div>
-        <br/>
-        <br/>
-        <br/>
-        <SearchBar/>
-        <br/>
-        <div className='row g-5'>        
-            <div className='col-md-5 col-lg-4 order-md first'>
+    <>
+      <div className='layout'>
+          <br/>
+          <br/>
+          <br/>
+          <SearchBar/>
+          <br/>
+          <div className='row d-flex justify-content-center' >        
+            <div className='col-md-4 col-lg-4 order-md first'>
               <Dropdown/>
             </div>
-            <div className='col-md-7 col-lg-8'>
-            {/* <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />              
-            <JobOffer {...jobData} />               */}
+            <div className='col-md-8 col-lg-8'>
+            {typeof jobsData !== 'undefined' && jobsData.map((job) => (
+              <JobOfferContainer key={job.jobId}jobId job={job} action={authState.isSignedIn ? openShowDApplyForJob: undefined } setProp={setJobIdProp} actionName={'Apply'}/>
+              ))}            
             </div>
-        </div>
-     </div>
+          </div>
+      </div>
+      {showApplyForJob && <ApplyForJobModal handleClose={closeShowApplyForJob} id={jobId} />}
+    </>
   )
 }
 
