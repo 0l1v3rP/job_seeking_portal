@@ -3,15 +3,14 @@ import SearchBar from '../../components/SearchBar';
 import JobOfferContainer from '../../components/JobOfferContainer';
 import Dropdown from '../../components/Dropdown';
 import './AvailableJobs.css';
-import { useAuth } from '../../components/AuthProvider';
+import { useAuth } from '../../contexts/AuthProvider';
 import { useEffect, useState } from 'react';
-import { formatImgFromBuffer } from '../../utils/imgHelper';
 import ApplyForJobModal from '../../modals/ApplyForJobModal';
+import { useToast } from '../../contexts/ToastProvider';
 
 function AvailableJobs() {
   const { authState } = useAuth();
   const [jobsData, setJobsData] = useState();
-
   const[jobId, setJobId] = useState();
     const setJobIdProp = (job) => {setJobId(job.jobId)};
 
@@ -60,7 +59,7 @@ if (authState.isSignedIn === null) {
           </div>
       </div>
       {showApplyForJob && <ApplyForJobModal handleClose={closeShowApplyForJob} id={jobId} refreshFunction={fetchData}/>}
-    </>
+      </>
   )
 }
 

@@ -3,8 +3,8 @@ const {handleResponseAsync, handleResponseSync, payload} = require('../utils/res
 
 async function getAvailableJobs(req, res, next) {
     await handleResponseAsync( async () => {
-        const userId = req.session.user.id;
-        const companyId = req.session.user.companyId;
+        const userId = req.session.user?.id;
+        const companyId = req.session.user?.companyId;
         const jobs = await business.getAvailableJobs(userId, companyId);
         payload(jobs, res);
     }, next);

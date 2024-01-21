@@ -5,9 +5,12 @@ import Home from '../pages/Home/Home';
 import Footer from './Footer';
 import UserForm from '../pages/UserForm/UserForm';
 import AvailableJobs from '../pages/AvailableJobs/AvailableJobs';
-import { useAuth } from './AuthProvider';
+import { useAuth } from '../contexts/AuthProvider';
 import JobOffers from '../pages/JobOffers/JobOffers';
+import Toasts from './Toasts';
+
 export default function Router() {
+
   
     const { authState } = useAuth();
       
@@ -21,6 +24,7 @@ export default function Router() {
             <Navbar/>
             <Outlet/>
             <Footer/>
+            <Toasts/>
             </>
         )
     }

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useToast } from '../contexts/ToastProvider';
+import { responseRequestHelper } from '../utils/requestHelper';
 
 const RegisterCompanyModal = ({ show, handleClose }) => {
+  const {addToast} = useToast();
+
   const [companyData, setCompanyData] = useState({
     name: '',
     description: '',
@@ -17,32 +21,19 @@ const RegisterCompanyModal = ({ show, handleClose }) => {
   };
 
   const handleRegister = async () => {
-    try {
       const formData = new FormData();
       formData.append('name', companyData.name);
       formData.append('description', companyData.description);
       formData.append('imageFile', companyData.imageFile);              
-
-      const response = await fetch('http://localhost:8000/registerCompany', {
-        method: 'POST',
-        // headers: {
-        //     'Content-Type' : 'multipart/form-data',
-        //   },
-        credentials: 'include',
-        body: formData,
-      });
-
-      if (response.ok) {
-        console.log('Company registered successfully');
+      await responseRequestHelper(async () => {
+        await fetch('http://localhost:8000/registerCompany', {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+        });
+      }, async () => {
         handleClose();
-      } else {
-        const errorData = await response.json();
-        console.error('Company registration failed:', errorData);
-      }
-    } catch (error) {
-      console.error('An error occurred during company registration', error);
-    }
-  };
+      }, 'Company Registered Successfuly', addToast)}
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -80,7 +71,6 @@ const RegisterCompanyModal = ({ show, handleClose }) => {
               type="file"
               accept="image/*"
               name="imageFile"
-            //   value={companyData.imageFile}
               onChange={handleInputChange}
             />
           </Form.Group>

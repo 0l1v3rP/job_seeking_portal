@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Navbar.css';
-import { useAuth, setCompanyStatusState, SetSignInState } from './AuthProvider';
+import { useAuth, setCompanyStatusState, SetSignInState } from '../contexts/AuthProvider';
 import SignOutModal from '../modals/SingOutModal';
 import { companyStatusEnum } from '../utils/constants/companyStatus';
 import RegisterCompanyModal from '../modals/registerCompanyModal';
@@ -24,7 +24,6 @@ function Navbar() {
   const [showDeleteCompany, setDeleteCompany] = useState(false);
   const openShowDeleteCompany = () => setDeleteCompany(true);
   const closeShowDeleteCompany = () => setDeleteCompany(false);
-
 
   useEffect(() => {
     window.addEventListener('resize', function() {
@@ -102,9 +101,9 @@ function Navbar() {
         </div>
       </nav>
       {showSignOut && <SignOutModal handleClose={closeShowSignOut} />}
-      {showDeleteAcc && <DeleteModalGeneric handleClose={closeShowDeleteAcc} endpoint={'deleteaccount'} type={'Account'} action={() => {SetSignInState(setAuthState, false)}} />}
+      {showDeleteAcc && <DeleteModalGeneric handleClose={closeShowDeleteAcc} endpoint={'deleteaccount'} type={'Account'} action={() => {SetSignInState(setAuthState, false)}}/>}
       {showRegisterCompany && <RegisterCompanyModal show={true} handleClose={closeShowRegisterCompany} />}
-      {showDeleteCompany && <DeleteModalGeneric  handleClose={closeShowDeleteCompany} endpoint={'deletecompany'} type={'Company'} action={() => {setCompanyStatusState(setAuthState, companyStatusEnum.NONE)}} />}
+      {showDeleteCompany && <DeleteModalGeneric  handleClose={closeShowDeleteCompany} endpoint={'deletecompany'} type={'Company'} action={() => {setCompanyStatusState(setAuthState, companyStatusEnum.NONE)}} />}      
     </>
   );
 }

@@ -1,21 +1,27 @@
-import {React,  useEffect, useState } from 'react';
+import {React, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useToast } from '../contexts/ToastProvider';
+import { responseRequestHelper } from '../utils/requestHelper';
 
 const ApplyForJobModal = ({ handleClose, id, refreshFunction}) => {
   const [resume, setResume] = useState();
   const [show, setShow] = useState(true);
+  const {addToast} = useToast();
 
   const handleAction = async () => {
-    await fetch(`http://localhost:8000/Application/apply`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({resume, jobId:id}),
-    }).then(setShow(false))
-    .then(refreshFunction());
-  };
+    await responseRequestHelper(async () => {
+      await fetch(`http://localhost:8000/Application/apply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({resume, jobId:id}),
+      });
+      }, async () => {
+        setShow(false);
+        refreshFunction()
+      }, 'Applied successfully', addToast)}
 
   return (
     <Modal show={show} onHide={handleClose}>

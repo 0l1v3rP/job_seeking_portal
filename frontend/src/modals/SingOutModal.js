@@ -1,28 +1,27 @@
 import React from 'react';
-import {useAuth, SetSignInState, setCompanyStatusState} from '../components/AuthProvider';
+import {useAuth, SetSignInState, setCompanyStatusState} from '../contexts/AuthProvider';
 import GenericModal from './GenericModal';
 import { companyStatusEnum } from '../utils/constants/companyStatus';
+import { useToast } from '../contexts/ToastProvider';
+import { responseRequestHelper } from '../utils/requestHelper';
 
 const SignOutModal = ({ handleClose }) => {
   const { setAuthState } = useAuth();
+  const {addToast} = useToast();
+
   const handleSignOut = async () => {
-    const response = await fetch('http://localhost:8000/signout', {
+    await responseRequestHelper(async () => {
+      await fetch('http://localhost:8000/signout', {
           method: 'GET',
           headers: {
             'Content-Type' : 'application/json',
           },
           credentials: 'include',
         });
-  
-        if (response.ok) {
-          console.log('User Signed out successfully'); 
-          SetSignInState(setAuthState, false);
-          setCompanyStatusState(setAuthState, companyStatusEnum.NONE);
-        } else {
-          const errorData = await response.json();
-          console.error('User Sign out failed:', errorData);
-        }
-    };
+    }, async () => {
+      SetSignInState(setAuthState, false);
+      setCompanyStatusState(setAuthState, companyStatusEnum.NONE);
+    }, 'Siged out successfully', addToast)}
 
   return (
     <GenericModal
@@ -34,4 +33,4 @@ const SignOutModal = ({ handleClose }) => {
   );
 };
 
-export default SignOutModal;
+export default SignOutModal

@@ -7,12 +7,10 @@ function handleResponseError(err, req, res, next){
     const code = err.code || 500; 
     const message = err.message || 'Internal Server Error'; 
     const name = err.name || 'ServerError'; 
-    const errMessage = `${name}: ${message}`;
-    console.error(errMessage);
-    res.status(code).json({ error: errMessage });   
+    console.error(`${name} ${message}`);
+    res.status(code).json({ error: message });   
 }
 
-// sends response to appropriate response handling middlewares
 async function handleResponseAsync(action, next) {
     try {
         await action();

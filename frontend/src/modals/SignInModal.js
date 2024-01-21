@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import {useAuth ,SetSignInState, fetchCompanyStatusState } from '../components/AuthProvider';
+import {useAuth ,SetSignInState, fetchCompanyStatusState } from '../contexts/AuthProvider';
+import { useToast } from '../contexts/ToastProvider';
+import { responseRequestHelper } from '../utils/requestHelper';
 
 const SignInModal = ({ show, handleClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {setAuthState} = useAuth();
+  const {addToast} = useToast();
 
-  
-  async function signIn() {
-    try {
-      const response = await fetch('http://localhost:8000/signin', {
+ const signIn = async () => {
+    await responseRequestHelper(async () => {
+      await fetch('http://localhost:8000/signin', {
         method: 'POST',
         headers: {
           'Content-Type' : 'application/json',
@@ -21,20 +23,12 @@ const SignInModal = ({ show, handleClose }) => {
           password: password
         })
       });
+    }, async () => {
+      SetSignInState(setAuthState, true);
+      await fetchCompanyStatusState(setAuthState);
+      handleClose();
+    }, 'Signed in successfully', addToast)}
 
-      if (response.ok) {
-        console.log('User Signed in successfully'); 
-        SetSignInState(setAuthState, true);
-        await fetchCompanyStatusState(setAuthState);
-        handleClose();
-      } else {
-        const errorData = await response.json();
-        console.error('User Sign in failed:', errorData);
-      }
-    } catch (error) {
-      console.error('An error occurred during user registration', error);
-    }
-  }
 
   return (
     <Modal show={show} onHide={handleClose}>

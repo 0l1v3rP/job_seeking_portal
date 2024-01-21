@@ -1,7 +1,7 @@
  import React from 'react';
 import JobOfferContainer from '../../components/JobOfferContainer';
 import './JobOffers.css';
-import { useAuth } from '../../components/AuthProvider';
+import { useAuth } from '../../contexts/AuthProvider';
 import { useEffect, useState } from 'react';
 import ControlTab from './ControlTab';
 

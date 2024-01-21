@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import FormField from './FormField';
 import CountryFormField from './CountryFormField';
 import {useNavigate} from 'react-router-dom';
-import { useAuth } from '../../components/AuthProvider';
+import { useAuth } from '../../contexts/AuthProvider';
 
 const UserForm = () => {
   const { authState } = useAuth();  

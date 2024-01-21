@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
+import { useToast } from '../contexts/ToastProvider';
+import { responseRequestHelper } from '../utils/requestHelper';
 
 const CreateJobOffer = ({ handleClose }) => {
+  const {addToast} = useToast();
+
   const [jobsData, setJobsData] = useState({
     title: '',
     location: '',
@@ -46,16 +50,18 @@ const CreateJobOffer = ({ handleClose }) => {
   };
 
   const handleCreate = async () => {
-    await fetch(`http://localhost:8000/Jobs/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify(jobsData),
-    });
-  };
-
+    await responseRequestHelper(async () => {
+      await fetch(`http://localhost:8000/Jobs/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(jobsData),
+      });
+    }, async () => {
+      handleClose();
+    }, 'Job Offer Created Successfully', addToast)}
 
   return (
     <Modal show={true} onHide={handleClose}>

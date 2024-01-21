@@ -3,7 +3,7 @@ import Carousel from '../../components/Carousel';
 import SearchBar from '../../components/SearchBar';
 import BestEmployeers from '../../components/BestEmployeers';
 import SignInModal from '../../modals/SignInModal';
-import { useAuth } from '../../components/AuthProvider';
+import { useAuth } from '../../contexts/AuthProvider';
 
 function Home() {
 

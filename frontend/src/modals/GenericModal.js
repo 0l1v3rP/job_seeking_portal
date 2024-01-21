@@ -1,17 +1,8 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { useAuth } from '../components/AuthProvider';
+import { responseRequestHelper } from '../utils/requestHelper';
 
-const GenericModal = ({ handleClose, title, actionText, actionFunction }) => {
-  const handleAction = async () => {
-    try {
-      await actionFunction();
-      handleClose();
-    } catch (error) {
-      console.error('An error occurred during the action:', error);
-    }
-  };
-
+const GenericModal = ({handleClose, title, actionText, actionFunction }) => {
   return (
     <Modal show={true} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -24,7 +15,7 @@ const GenericModal = ({ handleClose, title, actionText, actionFunction }) => {
         <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={handleAction}>
+        <Button variant="primary" onClick={actionFunction}>
           {actionText}
         </Button>
       </Modal.Footer>
