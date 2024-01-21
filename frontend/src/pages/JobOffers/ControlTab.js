@@ -11,7 +11,7 @@ function ControlTab({ companyStatus, selectedTab, setSelectedTab, setRefresh }) 
 
   return (
     <>
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{paddingTop:20, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Tabs
           activeKey={selectedTab}
           id="controlTab"

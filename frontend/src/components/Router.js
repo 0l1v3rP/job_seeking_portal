@@ -8,6 +8,7 @@ import AvailableJobs from '../pages/AvailableJobs/AvailableJobs';
 import { useAuth } from '../contexts/AuthProvider';
 import JobOffers from '../pages/JobOffers/JobOffers';
 import Toasts from './Toasts';
+import './Router.css'
 
 export default function Router() {
 
@@ -21,10 +22,14 @@ export default function Router() {
     const Layout = () => {
         return (
             <>
-            <Navbar/>
-            <Outlet/>
-            <Footer/>
-            <Toasts/>
+                <div className='main-content-wrapper'>
+                    <div className='content-wrapper'>
+                        <Navbar />
+                        <Outlet />
+                    </div>
+                    <Footer />
+                    <Toasts />
+                </div>
             </>
         )
     }
