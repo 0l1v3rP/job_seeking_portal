@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { useToast } from '../contexts/ToastProvider';
 import { responseRequestHelper } from '../utils/requestHelper';
 
-const CreateJobOffer = ({ handleClose }) => {
+const CreateJobOffer = ({ handleClose, setRefresh }) => {
   const {addToast} = useToast();
 
   const [jobsData, setJobsData] = useState({
@@ -51,7 +51,7 @@ const CreateJobOffer = ({ handleClose }) => {
 
   const handleCreate = async () => {
     await responseRequestHelper(async () => {
-      await fetch(`http://localhost:8000/Jobs/create`, {
+      return await fetch(`http://localhost:8000/Jobs/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,6 +60,7 @@ const CreateJobOffer = ({ handleClose }) => {
         body: JSON.stringify(jobsData),
       });
     }, async () => {
+      setRefresh(true);
       handleClose();
     }, 'Job Offer Created Successfully', addToast)}
 

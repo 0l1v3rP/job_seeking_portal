@@ -3,14 +3,14 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useToast } from '../contexts/ToastProvider';
 import { responseRequestHelper } from '../utils/requestHelper';
 
-const ApplyForJobModal = ({ handleClose, id, refreshFunction}) => {
+const ApplyForJobModal = ({ handleClose, id, setRefresh}) => {
   const [resume, setResume] = useState();
   const [show, setShow] = useState(true);
   const {addToast} = useToast();
 
   const handleAction = async () => {
     await responseRequestHelper(async () => {
-      await fetch(`http://localhost:8000/Application/apply`, {
+      return await fetch(`http://localhost:8000/Application/apply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ const ApplyForJobModal = ({ handleClose, id, refreshFunction}) => {
       });
       }, async () => {
         setShow(false);
-        refreshFunction()
+        setRefresh(true);
       }, 'Applied successfully', addToast)}
 
   return (

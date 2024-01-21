@@ -10,8 +10,7 @@ async function insertCompany(company) {
 
 
 async function isUserAdminForCompany(user_id) {
-    const query =  `SELECT 1 FROM ${dbHelper.Endpoints.COMPANY} 
-    WHERE ${user_id}=super_admin LIMIT 1`
+    const query =  `SELECT 1 FROM ${dbHelper.Endpoints.COMPANY} WHERE ${user_id}=super_admin LIMIT 1`
     return await dbHelper.selectRecords(query, []);
 }
 
@@ -31,10 +30,7 @@ async function insertCompany(company) {
 }
 
 function getUserCompanyQuery(select) {
-    `SELECT ${select} FROM ${dbHelper.Endpoints.COMPANY} 
-        JOIN ${dbHelper.Endpoints.USER}
-            ON ${dbHelper.Endpoints.COMPANY}.company_id=${dbHelper.Endpoints.USER}.user_company
-        WHERE ${dbHelper.Endpoints.USER}.email=$1 LIMIT 1`
+    `SELECT ${select} FROM ${dbHelper.Endpoints.COMPANY} JOIN ${dbHelper.Endpoints.USER} ON ${dbHelper.Endpoints.COMPANY}.company_id=${dbHelper.Endpoints.USER}.user_company WHERE ${dbHelper.Endpoints.USER}.email=$1 LIMIT 1`
 }
 module.exports = {
     insertCompany,

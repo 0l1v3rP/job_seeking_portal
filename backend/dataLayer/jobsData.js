@@ -13,13 +13,13 @@ async function getAllJobs() {
 
 async function getAvailableJobs(userId, companyId) {
     let values = [];
-    let query = `SELECT ${dbHelper.Endpoints.JOB}.*, "${dbHelper.Endpoints.COMPANY}".* FROM "${dbHelper.Endpoints.JOB}" ${joinCompany()} `;
+    let query = `SELECT ${dbHelper.Endpoints.JOB}.*, "${dbHelper.Endpoints.COMPANY}".* FROM "${dbHelper.Endpoints.JOB}" ${joinCompany()}`;
 
     if (typeof userId !== 'undefined') {
-      query += `JOIN "${dbHelper.Endpoints.APPLICATION}" USING(job_id) WHERE user_id != $1 `;
+      query += ` LEFT JOIN "${dbHelper.Endpoints.APPLICATION}" ON ${dbHelper.Endpoints.APPLICATION}.job_id = ${dbHelper.Endpoints.JOB}.job_id AND ${dbHelper.Endpoints.APPLICATION}.user_id = $1 WHERE ${dbHelper.Endpoints.APPLICATION}.user_id IS NULL`;
       values.push(userId);
       if (typeof companyId !== 'undefined') {
-        query += `AND ${dbHelper.Endpoints.JOB}.employer != $2`;
+        query += ` AND ${dbHelper.Endpoints.JOB}.employer != $2`;
         values.push(companyId);  
       } 
     } 
@@ -29,12 +29,10 @@ async function getAvailableJobs(userId, companyId) {
 }
 
 async function getCompanyJobs(companyId) {
-    const query = `SELECT * FROM "${dbHelper.Endpoints.JOB}" WHERE employer = $1`;  
+    const query = `SELECT * FROM "${dbHelper.Endpoints.JOB}" ${joinCompany()} WHERE employer = $1`;  
     const records = await dbHelper.selectRecords(query, [companyId]);
     return mapAllFromDbFormat(records, JobDTO);
 }
-
-
 
 async function insertJob(job) { 
     const dbJob = job.toDBFormat();

@@ -26,7 +26,7 @@ const RegisterCompanyModal = ({ show, handleClose }) => {
       formData.append('description', companyData.description);
       formData.append('imageFile', companyData.imageFile);              
       await responseRequestHelper(async () => {
-        await fetch('http://localhost:8000/registerCompany', {
+        return await fetch('http://localhost:8000/registerCompany', {
           method: 'POST',
           credentials: 'include',
           body: formData,

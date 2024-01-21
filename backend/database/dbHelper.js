@@ -26,7 +26,7 @@ async function selectRecords(query, values = []) {
     const result = await client.query(query, values);
     console.log('Select result:', result.rows);
     return result.rows;
-  }, `Error selecting from da tabase`);
+  }, `Error selecting from database`);
 }
 
 async function updateRecord(endPoint, dataObj, keyName, keyValue) {
@@ -38,7 +38,7 @@ async function updateRecord(endPoint, dataObj, keyName, keyValue) {
     const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
     const result = await client.query(updateQuery, [...values, keyValue]);
     console.log('Update result:', result.rows);
-    return result;
+    return result.rows;
   }, endPoint);
 }
 
@@ -49,7 +49,7 @@ async function updateField(endPoint, fieldName, fieldValue, keyName, keyValue ) 
     const updateQuery = `UPDATE "${endPoint}" SET ${setClause} WHERE ${whereClause} RETURNING *`;
     const result = await client.query(updateQuery, [fieldValue, keyValue]);
     console.log('Update result:', result.rows);
-    return result;
+    return  result.rows;
   }, endPoint);
 }
 
@@ -71,6 +71,7 @@ async function handleUpdateOperation(action, endPoint) {
     const successMessage = `Record in ${endPoint} updated successfully`;
     const failureMessage = `No such record found in ${endPoint}`
     handleResult(result, successMessage, failureMessage);
+    return result;
   }, `Error updating database | table: ${endPoint}`);
 }
 
@@ -82,7 +83,7 @@ async function handleDatabaseOperation(action, message) {
 }
 
 function handleResult(result, successMessage, failureMessage) {
-  if (result.rowCount > 0) {
+  if (result.length > 0) {
     console.log(successMessage);
   } else {
     throw new UnsuccessfullOperationException(failureMessage, 404);

@@ -3,7 +3,11 @@ import './JobOfferContainer.css';
 import { formatImgFromBuffer } from '../utils/imgHelper';
 
 function JobOfferContainer({ job, action, setProp, actionName }) {
-  setProp(job);
+  const handleAction = () => {
+    setProp(job);
+    action();
+  };
+
   const img = formatImgFromBuffer(job.company.file)
   return (
     <>
@@ -16,7 +20,7 @@ function JobOfferContainer({ job, action, setProp, actionName }) {
           <p>pay: {job.hourlyPay}/h $</p>
           <div className='btnPair' >
             <button className="btn btn-secondary" >Details</button>
-            {typeof action !== 'undefined' && <button className="btn btn-primary" onClick={action}>{actionName}</button>}
+            {typeof action !== 'undefined' && <button className="btn btn-primary" onClick={handleAction}>{actionName}</button>}
           </div>
         </div>
         <div className='imgContainer'>

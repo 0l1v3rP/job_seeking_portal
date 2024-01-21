@@ -7,7 +7,7 @@ const { ApplicationDTO } = require('../models/application')
 
 app.post('/apply', isSignedIn, withoutCompany, validateApplication, ApplicationDTO.createFromClientFormat, controller.apply);
 app.get('/myapplication', isSignedIn, controller.myApplications);
-app.get('/companyapplication',isSignedIn, withCompany, controller.companyApplications);
+app.get('/companyapplications',isSignedIn, withCompany, controller.companyApplications);
 //app.put('/changestatus', checkStatus, );
 
 module.exports = app;

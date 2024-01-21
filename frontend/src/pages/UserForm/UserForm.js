@@ -6,9 +6,12 @@ import FormField from './FormField';
 import CountryFormField from './CountryFormField';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthProvider';
+import { responseRequestHelper } from '../../utils/requestHelper';
+import { useToast } from '../../contexts/ToastProvider';
 
 const UserForm = () => {
   const { authState } = useAuth();  
+  const {addToast} = useToast();
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -20,7 +23,6 @@ const UserForm = () => {
       password: '',
     }),
     address: '',
-    password: '',
     country: '',
     zip: '',
   });
@@ -161,8 +163,8 @@ const UserForm = () => {
   }
 
   const performUserAction = async (endpoint, successMessage, method) => {
-    try {
-      const response = await fetch(`http://localhost:8000/${endpoint}`, {
+    await responseRequestHelper(async () => {
+      return await fetch(`http://localhost:8000/${endpoint}`, {
         method: method,
         headers: {
           'Content-Type': 'application/json',
@@ -170,18 +172,9 @@ const UserForm = () => {
         credentials: 'include',
         body: JSON.stringify(formData),
       });
-  
-      if (response.ok) {
-        console.log(successMessage);
-        navigate('/');
-      } else {
-        const errorData = await response.json();
-        console.error(`User action failed for ${endpoint}:`, errorData);
-      }
-    } catch (error) {
-      console.error(`An error occurred during user action for ${endpoint}`, error);
-    }
-  };
+    }, async () => {
+      navigate('/');
+    }, successMessage, addToast)}
   
   const updateUser = async () => {
     await performUserAction('editaccount', 'User edit successfully', 'PUT');

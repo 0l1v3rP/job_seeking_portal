@@ -4,8 +4,7 @@ import { Tabs, Tab, Button } from 'react-bootstrap';
 import { companyStatusEnum } from '../../utils/constants/companyStatus';
 import CreateJobOffer from '../../modals/CreateJobOffer';
 
-function ControlTab({ companyStatus }) {
-  const [selectedTab, setSelectedTab] = useState('myJobs');
+function ControlTab({ companyStatus, selectedTab, setSelectedTab, setRefresh }) {
   const [showCreateJob, setCreateJob] = useState(false);
   const openShowCreateJob = () => setCreateJob(true);
   const closeShowCreateJob = () => setCreateJob(false);
@@ -26,12 +25,12 @@ function ControlTab({ companyStatus }) {
           }
         </Tabs>
         {selectedTab === 'company' &&  
-          <Button variant="primary" onClick={openShowCreateJob}>
+          <Button variant="primary" onClick={openShowCreateJob} style={{marginBottom:15}}>
             Create Job
           </Button>
         }
       </div>
-      {showCreateJob && <CreateJobOffer handleClose={closeShowCreateJob} />}
+      {showCreateJob && <CreateJobOffer handleClose={closeShowCreateJob} setRefresh={setRefresh}/>}
     </>
   );
 }

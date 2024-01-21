@@ -27,7 +27,7 @@ function validateUser(req, res, next) {
     handleResponseSync(() => {
         const user = req.body;        
         checkForNullOrEmpty(...Object.values(user));
-        if (!isValidEmail(user.email)) {
+        if (typeof user.email !== 'undefined' && !isValidEmail(user.email)) {
             throw new ValidationException('Invalid email format', 403);
         }
         if(!isValidZip(user.zip)) {
@@ -40,12 +40,12 @@ async function checkIfUserAlreadyExist(req,res,next) {
     await handleResponseAsync( async () => {
         const users = await getAllUsers();
 
-        const existEmail = users.find(u => u.email === '');
+        const existEmail = users.find(u => u.email === req.body.email);
         if(existEmail) {
             throw new ValidationException('User with same email already exists', 403);
         }
 
-        const existUsername = users.find(u => u.username === '');
+        const existUsername = users.find(u => u.username === req.body.username);
         if(existUsername) {
             throw new ValidationException('User with same username already exists', 403);
         }

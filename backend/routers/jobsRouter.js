@@ -5,5 +5,6 @@ const {isSignedIn, withCompany} = require('../utils/authService');
 const JobDTO = require('../models/job');
 
 app.get('/getJobs',controller.getAvailableJobs);
+app.get('/companyJobs',isSignedIn, withCompany, controller.getCompanyJobs);
 app.post('/create',isSignedIn, withCompany, JobDTO.createFromClientFormat, controller.create )
 module.exports = app;

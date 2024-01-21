@@ -23,7 +23,7 @@ async function editUser(user) {
     const dbUser = user.toDBFormat();
     const keyName = 'email';
     const result = await dbHelper.updateRecord(dbHelper.Endpoints.USER ,dbUser, keyName, user.email);
-    const resultModel = UserDTO.fromDBFormat(result);
+    const resultModel = UserDTO.fromDBFormat(result[0]);
     return resultModel;
 }
 

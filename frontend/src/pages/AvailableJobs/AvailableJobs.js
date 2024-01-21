@@ -7,18 +7,19 @@ import { useAuth } from '../../contexts/AuthProvider';
 import { useEffect, useState } from 'react';
 import ApplyForJobModal from '../../modals/ApplyForJobModal';
 import { useToast } from '../../contexts/ToastProvider';
+import JobList from '../../components/JobList';
+
 
 function AvailableJobs() {
   const { authState } = useAuth();
   const [jobsData, setJobsData] = useState();
   const[jobId, setJobId] = useState();
-    const setJobIdProp = (job) => {setJobId(job.jobId)};
+  const setJobIdProp = (job) => {setJobId(job.jobId)};
+  const[refresh, setRefresh] = useState();
 
   const [showApplyForJob, setApplyForJob] = useState(false);
   const openShowDApplyForJob = () => setApplyForJob(true);
   const closeShowApplyForJob = () => setApplyForJob(false);
-
-
 
   const fetchData = async () => {
       await fetch('http://localhost:8000/Jobs/getJobs', {
@@ -52,13 +53,12 @@ if (authState.isSignedIn === null) {
               <Dropdown/>
             </div>
             <div className='col-md-8 col-lg-8'>
-            {typeof jobsData !== 'undefined' && jobsData.map((job) => (
-              <JobOfferContainer key={job.jobId}jobId job={job} action={authState.isSignedIn ? openShowDApplyForJob: undefined } setProp={setJobIdProp} actionName={'Apply'}/>
-              ))}            
+              <JobList setProp={setJobIdProp} endpoint={'getJobs'} refresh={refresh} setRefresh={setRefresh} action={authState.isSignedIn ? openShowDApplyForJob: undefined } actionName={'Apply'}/>
+            
             </div>
           </div>
       </div>
-      {showApplyForJob && <ApplyForJobModal handleClose={closeShowApplyForJob} id={jobId} refreshFunction={fetchData}/>}
+      {showApplyForJob && <ApplyForJobModal handleClose={closeShowApplyForJob} id={jobId}  setRefresh={setRefresh}/>}
       </>
   )
 }

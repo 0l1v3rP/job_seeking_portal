@@ -8,7 +8,7 @@ const DeleteModalGeneric = ({ handleClose, endpoint, action, type }) => {
   
   const handleDelete = async () => {
     await responseRequestHelper(async () => {
-      await fetch(`http://localhost:8000/${endpoint}`, {
+      return await fetch(`http://localhost:8000/${endpoint}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

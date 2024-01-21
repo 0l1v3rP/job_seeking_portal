@@ -12,7 +12,7 @@ const SignInModal = ({ show, handleClose }) => {
 
  const signIn = async () => {
     await responseRequestHelper(async () => {
-      await fetch('http://localhost:8000/signin', {
+      return await fetch('http://localhost:8000/signin', {
         method: 'POST',
         headers: {
           'Content-Type' : 'application/json',
